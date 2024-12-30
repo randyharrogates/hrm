@@ -1,2 +1,86 @@
-# hrm
-Simple HRM for enterprise
+# HRM System
+
+A simple Human Resource Management (HRM) system built with:
+- **Frontend**: ReactJS (TypeScript)
+- **Backend**: Node.js with ExpressJS (TypeScript)
+- **Database**: MongoDB
+
+## Features
+- Add new employees
+- View a list of all employees
+- Search for employees by ID
+- Edit employee details
+- Delete employees
+
+## Project Structure
+### Backend (`hrm-backend`)
+- Handles API requests and CRUD operations for employee data.
+- Uses MongoDB as the database.
+
+### Frontend (`hrm-frontend`)
+- Provides a user-friendly interface for interacting with the HRM system.
+
+---
+
+## Getting Started
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v14 or later)
+- [MongoDB](https://www.mongodb.com/)
+- [npm](https://www.npmjs.com/)
+
+### Installation
+
+#### 1. Clone the repository
+```bash
+git clone https://github.com/your-username/hrm-system.git
+cd hrm-system
+```
+
+#### 2. Setup the backend
+```bash
+cd backend
+npm install
+```
+
+Create a .env file in the backend folder with the following:
+```makefile
+MONGO_URI=mongodb://127.0.0.1:27017/hrm
+PORT=5000
+```
+
+Run the backend
+```bash
+npx ts-node-dev src/server.ts
+```
+
+#### 3. Setup the frontend
+```bash
+cd hrm-frontend
+npm install
+```
+
+Run the frontend
+```bash
+npm start
+```
+
+### Usage
+1. Open your browser and visit http://localhost:3000.
+2. Use the interface to add, view, edit, and search for employees.
+
+### API endpoints
+![alt text](image.png)
+
+### Technologies Used
+#### Backend
+- Node.js
+- ExpressJS
+- TypeScript
+- MongoDB
+
+#### Frontend
+- ReactJS
+- TypeScript
+- Axios
+- React Router
