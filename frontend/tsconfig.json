@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"types": ["node", "jest"],
+		"target": "ESNext",
+		"module": "ESNext",
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "Node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"jsx": "react-jsx",
+		"paths": {
+			"@shared/*": ["../shared/*"] // Map `@shared` to the shared directory
+		}
+	},
+	"include": ["src"],
+	"exclude": ["node_modules", "build"]
+}

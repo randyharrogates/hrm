@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api";
-import ObservationReportForm from "../components/ObservationReportForm";
+import ObservationReportForm from "../components/EmployeeObservationReportForm";
 
 interface ObservationReport {
 	date: string;

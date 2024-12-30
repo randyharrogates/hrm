@@ -1,13 +1,9 @@
 /** @format */
 
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { IEmployee, IObservationReport } from "@shared/employee";
 
-// Observation Report Interface and Schema
-export interface IObservationReport {
-	date: Date;
-	observations: string;
-	evaluator: string;
-}
+
 
 const ObservationReportSchema: Schema = new Schema({
 	date: { type: Date, required: true },
@@ -16,19 +12,6 @@ const ObservationReportSchema: Schema = new Schema({
 });
 
 // Base Employee Interface and Schema
-export interface IEmployee extends Document {
-	EN: string;
-	name: string;
-	contact: string;
-	employee_type: string;
-	training_outlet: string;
-	outlet: string;
-	probation_start_date: Date;
-	probation_end_date: Date;
-	remarks: string;
-	current_employee: boolean;
-	observationReports: IObservationReport[];
-}
 
 const BaseEmployeeSchema: Schema = new Schema({
 	EN: { type: String, required: true, unique: true },
