@@ -7,6 +7,7 @@ export interface IObservationReport {
 }
 
 export interface IEmployee {
+	_id: string;
 	EN: string;
 	name: string;
 	contact: string;

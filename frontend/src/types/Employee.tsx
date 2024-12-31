@@ -1,6 +1,6 @@
 /** @format */
 
-import { IEmployee } from "@shared/types/employee";
+import { IEmployee, IObservationReport } from "@shared/types/employee";
 
 export interface IFullTimeEmployee extends IEmployee {
 	annual_salary: number;
@@ -24,3 +24,4 @@ export interface IContractor extends IEmployee {
 
 // A union type to represent all possible employee types
 export type EmployeeTypes = IFullTimeEmployee | IPartTimeEmployee | IIntern | IContractor;
+export type ObservationReport = IObservationReport;

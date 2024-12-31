@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { createEmployee } from "../api";
+import { useNavigate } from "react-router-dom";
 
 const EmployeeForm: React.FC = () => {
 	const [EN, setEN] = useState("");
@@ -24,6 +25,39 @@ const EmployeeForm: React.FC = () => {
 	const [durationInMonths, setDurationInMonths] = useState<number | null>(null);
 	const [contractAgency, setContractAgency] = useState("");
 
+	// Observation reports
+	const [observationReports, setObservationReports] = useState<{ date: string; observations: string; evaluator: string }[]>([{ date: "", observations: "", evaluator: "" }]);
+
+	const navigate = useNavigate();
+
+	const handleAddObservation = () => {
+		setObservationReports([...observationReports, { date: "", observations: "", evaluator: "" }]);
+	};
+
+	const handleObservationChange = (index: number, field: string, value: string) => {
+		const updatedReports = [...observationReports];
+		updatedReports[index] = { ...updatedReports[index], [field]: value };
+		setObservationReports(updatedReports);
+	};
+
+	const handleRemoveObservation = (index: number) => {
+		const updatedReports = observationReports.filter((_, i) => i !== index);
+		setObservationReports(updatedReports);
+	};
+
+	const handleEmployeeTypeChange = (newType: string) => {
+		setEmployeeType(newType);
+
+		// Clear specific fields when switching employee type
+		setAnnualSalary(null);
+		setHealthcarePlan("");
+		setHourlyRate(null);
+		setContractEndDate("");
+		setMentor("");
+		setDurationInMonths(null);
+		setContractAgency("");
+	};
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -38,6 +72,7 @@ const EmployeeForm: React.FC = () => {
 			probation_end_date: probationEndDate,
 			remarks,
 			current_employee: currentEmployee,
+			observationReports, // Include all observation reports in the payload
 		};
 
 		let specificData = {};
@@ -59,25 +94,7 @@ const EmployeeForm: React.FC = () => {
 		}
 
 		await createEmployee({ ...baseData, ...specificData });
-
-		// Clear fields
-		setEN("");
-		setName("");
-		setContact("");
-		setEmployeeType("FullTime");
-		setTrainingOutlet("");
-		setOutlet("");
-		setProbationStartDate("");
-		setProbationEndDate("");
-		setRemarks("");
-		setCurrentEmployee(true);
-		setAnnualSalary(null);
-		setHealthcarePlan("");
-		setHourlyRate(null);
-		setContractEndDate("");
-		setMentor("");
-		setDurationInMonths(null);
-		setContractAgency("");
+		navigate("/employees");
 	};
 
 	return (
@@ -86,7 +103,6 @@ const EmployeeForm: React.FC = () => {
 				<i className="bi bi-person-plus"></i> Add Employee
 			</h2>
 			<form onSubmit={handleSubmit} className="row g-3">
-				{/* Employee Number */}
 				<div className="col-md-6">
 					<label htmlFor="EN" className="form-label">
 						Employee Number
@@ -94,7 +110,6 @@ const EmployeeForm: React.FC = () => {
 					<input type="text" id="EN" className="form-control" value={EN} onChange={(e) => setEN(e.target.value)} required />
 				</div>
 
-				{/* Name */}
 				<div className="col-md-6">
 					<label htmlFor="name" className="form-label">
 						Name
@@ -102,7 +117,6 @@ const EmployeeForm: React.FC = () => {
 					<input type="text" id="name" className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
 				</div>
 
-				{/* Contact */}
 				<div className="col-md-6">
 					<label htmlFor="contact" className="form-label">
 						Contact
@@ -110,12 +124,11 @@ const EmployeeForm: React.FC = () => {
 					<input type="text" id="contact" className="form-control" value={contact} onChange={(e) => setContact(e.target.value)} required />
 				</div>
 
-				{/* Employee Type */}
 				<div className="col-md-6">
 					<label htmlFor="employeeType" className="form-label">
 						Employee Type
 					</label>
-					<select id="employeeType" className="form-select" value={employeeType} onChange={(e) => setEmployeeType(e.target.value)}>
+					<select id="employeeType" className="form-select" value={employeeType} onChange={(e) => handleEmployeeTypeChange(e.target.value)}>
 						<option value="FullTime">Full-Time</option>
 						<option value="PartTime">Part-Time</option>
 						<option value="Intern">Intern</option>
@@ -123,7 +136,6 @@ const EmployeeForm: React.FC = () => {
 					</select>
 				</div>
 
-				{/* Training Outlet */}
 				<div className="col-md-6">
 					<label htmlFor="trainingOutlet" className="form-label">
 						Training Outlet
@@ -131,7 +143,6 @@ const EmployeeForm: React.FC = () => {
 					<input type="text" id="trainingOutlet" className="form-control" value={trainingOutlet} onChange={(e) => setTrainingOutlet(e.target.value)} required />
 				</div>
 
-				{/* Outlet */}
 				<div className="col-md-6">
 					<label htmlFor="outlet" className="form-label">
 						Outlet
@@ -139,13 +150,13 @@ const EmployeeForm: React.FC = () => {
 					<input type="text" id="outlet" className="form-control" value={outlet} onChange={(e) => setOutlet(e.target.value)} required />
 				</div>
 
-				{/* Probation Dates */}
 				<div className="col-md-6">
 					<label htmlFor="probationStartDate" className="form-label">
 						Probation Start Date
 					</label>
 					<input type="date" id="probationStartDate" className="form-control" value={probationStartDate} onChange={(e) => setProbationStartDate(e.target.value)} required />
 				</div>
+
 				<div className="col-md-6">
 					<label htmlFor="probationEndDate" className="form-label">
 						Probation End Date
@@ -153,7 +164,6 @@ const EmployeeForm: React.FC = () => {
 					<input type="date" id="probationEndDate" className="form-control" value={probationEndDate} onChange={(e) => setProbationEndDate(e.target.value)} required />
 				</div>
 
-				{/* Remarks */}
 				<div className="col-12">
 					<label htmlFor="remarks" className="form-label">
 						Remarks
@@ -161,7 +171,6 @@ const EmployeeForm: React.FC = () => {
 					<textarea id="remarks" className="form-control" value={remarks} onChange={(e) => setRemarks(e.target.value)}></textarea>
 				</div>
 
-				{/* Current Employee */}
 				<div className="col-12">
 					<div className="form-check">
 						<input className="form-check-input" type="checkbox" id="currentEmployee" checked={currentEmployee} onChange={(e) => setCurrentEmployee(e.target.checked)} />
@@ -171,76 +180,61 @@ const EmployeeForm: React.FC = () => {
 					</div>
 				</div>
 
-				{/* Specific Fields */}
-				{employeeType === "FullTime" && (
-					<>
-						<div className="col-md-6">
-							<label htmlFor="annualSalary" className="form-label">
-								Annual Salary
-							</label>
-							<input type="number" id="annualSalary" className="form-control" value={annualSalary || ""} onChange={(e) => setAnnualSalary(Number(e.target.value))} />
+				{/* Observation Reports Section */}
+				<div className="col-12">
+					<h4 className="mt-4">Observation Reports</h4>
+					{observationReports.map((report, index) => (
+						<div key={index} className="row g-3 mb-3 border rounded p-3">
+							<div className="col-md-4">
+								<label htmlFor={`date-${index}`} className="form-label">
+									Date
+								</label>
+								<input
+									type="date"
+									id={`date-${index}`}
+									className="form-control"
+									value={report.date}
+									onChange={(e) => handleObservationChange(index, "date", e.target.value)}
+									required
+								/>
+							</div>
+							<div className="col-md-4">
+								<label htmlFor={`evaluator-${index}`} className="form-label">
+									Evaluator
+								</label>
+								<input
+									type="text"
+									id={`evaluator-${index}`}
+									className="form-control"
+									value={report.evaluator}
+									onChange={(e) => handleObservationChange(index, "evaluator", e.target.value)}
+									required
+								/>
+							</div>
+							<div className="col-md-4">
+								<label htmlFor={`observations-${index}`} className="form-label">
+									Observations
+								</label>
+								<textarea
+									id={`observations-${index}`}
+									className="form-control"
+									value={report.observations}
+									onChange={(e) => handleObservationChange(index, "observations", e.target.value)}
+									required
+								></textarea>
+							</div>
+							<div className="col-12 text-end">
+								<button type="button" className="btn btn-danger btn-sm" onClick={() => handleRemoveObservation(index)}>
+									<i className="bi bi-trash"></i> Remove
+								</button>
+							</div>
 						</div>
-						<div className="col-md-6">
-							<label htmlFor="healthcarePlan" className="form-label">
-								Healthcare Plan
-							</label>
-							<input type="text" id="healthcarePlan" className="form-control" value={healthcarePlan} onChange={(e) => setHealthcarePlan(e.target.value)} />
-						</div>
-					</>
-				)}
+					))}
+					<button type="button" className="btn btn-secondary" onClick={handleAddObservation}>
+						<i className="bi bi-plus-circle"></i> Add Observation
+					</button>
+				</div>
 
-				{employeeType === "PartTime" && (
-					<>
-						<div className="col-md-6">
-							<label htmlFor="hourlyRate" className="form-label">
-								Hourly Rate
-							</label>
-							<input type="number" id="hourlyRate" className="form-control" value={hourlyRate || ""} onChange={(e) => setHourlyRate(Number(e.target.value))} />
-						</div>
-						<div className="col-md-6">
-							<label htmlFor="contractEndDate" className="form-label">
-								Contract End Date
-							</label>
-							<input type="date" id="contractEndDate" className="form-control" value={contractEndDate} onChange={(e) => setContractEndDate(e.target.value)} />
-						</div>
-					</>
-				)}
-
-				{employeeType === "Intern" && (
-					<>
-						<div className="col-md-6">
-							<label htmlFor="mentor" className="form-label">
-								Mentor
-							</label>
-							<input type="text" id="mentor" className="form-control" value={mentor} onChange={(e) => setMentor(e.target.value)} />
-						</div>
-						<div className="col-md-6">
-							<label htmlFor="durationInMonths" className="form-label">
-								Duration (Months)
-							</label>
-							<input type="number" id="durationInMonths" className="form-control" value={durationInMonths || ""} onChange={(e) => setDurationInMonths(Number(e.target.value))} />
-						</div>
-					</>
-				)}
-
-				{employeeType === "Contractor" && (
-					<>
-						<div className="col-md-6">
-							<label htmlFor="contractAgency" className="form-label">
-								Contract Agency
-							</label>
-							<input type="text" id="contractAgency" className="form-control" value={contractAgency} onChange={(e) => setContractAgency(e.target.value)} />
-						</div>
-						<div className="col-md-6">
-							<label htmlFor="contractEndDate" className="form-label">
-								Contract End Date
-							</label>
-							<input type="date" id="contractEndDate" className="form-control" value={contractEndDate} onChange={(e) => setContractEndDate(e.target.value)} />
-						</div>
-					</>
-				)}
-
-				{/* Submit Button */}
 				<div className="col-12">
 					<button type="submit" className="btn btn-primary w-100">
 						<i className="bi bi-check-circle"></i> Submit
