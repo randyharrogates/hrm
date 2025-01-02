@@ -107,10 +107,10 @@ const EmployeeList: React.FC = () => {
 					</label>
 					<select id="filter-dropdown" className="form-select" value={filter} onChange={(e) => setFilter(e.target.value)}>
 						<option value="All">All Types</option>
-						<option value="FullTime">Full-Time</option>
-						<option value="PartTime">Part-Time</option>
+						<option value="MasterCrew">Master Crew</option>
+						<option value="SeniorCrew">Senior Crew</option>
 						<option value="Intern">Intern</option>
-						<option value="Contractor">Contractor</option>
+						<option value="SpecialistTrainee">Specialist Trainee</option>
 					</select>
 				</div>
 

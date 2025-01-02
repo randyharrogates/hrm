@@ -1,53 +1,56 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import api from "../api";
-import EmployeeObservationReportForm from "../components/EmployeeObservationReportForm";
+// /** @format */
 
-interface ObservationReport {
-	date: string;
-	observations: string;
-	evaluator: string;
-}
+// import React, { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom";
+// import api from "../api";
+// import EmployeeObservationReportForm from "../components/EmployeeObservationReportForm";
 
-const EmployeeObservationPage: React.FC = () => {
-	const { id } = useParams<{ id: string }>();
-	const [reports, setReports] = useState<ObservationReport[]>([]);
+// interface ObservationReport {
+// 	date: string;
+// 	observations: string;
+// 	evaluator: string;
+// }
 
-	const fetchReports = async () => {
-		const response = await api.get(`/${id}/observations`);
-		setReports(response.data);
-	};
+// const EmployeeObservationPage: React.FC = () => {
+// 	const { id } = useParams<{ id: string }>();
+// 	const [reports, setReports] = useState<ObservationReport[]>([]);
 
-	const handleAddObservation = (newReport: ObservationReport) => {
-		setReports((prevReports) => [...prevReports, newReport]);
-	};
+// 	const fetchReports = async () => {
+// 		const response = await api.get(`/${id}/observations`);
+// 		setReports(response.data);
+// 	};
 
-	useEffect(() => {
-		fetchReports();
-	}, [id]);
+// 	const handleAddObservation = (newReport: ObservationReport) => {
+// 		setReports((prevReports) => [...prevReports, newReport]);
+// 	};
 
-	return (
-		<div className="container mt-4">
-			<h1 className="text-center mb-4">Observation Reports</h1>
-			<EmployeeObservationReportForm employeeId={id!} onAddObservation={handleAddObservation} />
-			<h3 className="mt-4">Existing Reports</h3>
-			<ul className="list-group">
-				{reports.length > 0 ? (
-					reports.map((report, index) => (
-						<li key={index} className="list-group-item">
-							<strong>Date:</strong> {new Date(report.date).toLocaleDateString()} <br />
-							<strong>Observations:</strong> {report.observations} <br />
-							<strong>Evaluator:</strong> {report.evaluator}
-						</li>
-					))
-				) : (
-					<li className="list-group-item text-center">No reports available</li>
-				)}
-			</ul>
-		</div>
-	);
-};
+// 	useEffect(() => {
+// 		fetchReports();
+// 	}, [id]);
 
-export default EmployeeObservationPage;
+// 	return (
+// 		<div className="container mt-4">
+// 			<h1 className="text-center mb-4">Observation Reports</h1>
+// 			<EmployeeObservationReportForm employeeId={id!} onAddObservation={handleAddObservation} />
+// 			<h3 className="mt-4">Existing Reports</h3>
+// 			<ul className="list-group">
+// 				{reports.length > 0 ? (
+// 					reports.map((report, index) => (
+// 						<li key={index} className="list-group-item">
+// 							<strong>Date:</strong> {new Date(report.date).toLocaleDateString()} <br />
+// 							<strong>Observations:</strong> {report.observations} <br />
+// 							<strong>Evaluator:</strong> {report.evaluator}
+// 						</li>
+// 					))
+// 				) : (
+// 					<li className="list-group-item text-center">No reports available</li>
+// 				)}
+// 			</ul>
+// 		</div>
+// 	);
+// };
+
+// export default EmployeeObservationPage;
+export default {};

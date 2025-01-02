@@ -1,7 +1,7 @@
 /** @format */
 
 import { Request, Response } from "express";
-import { EmployeeModel } from "../models/Employee";
+import { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, InternModel, SpecialistTraineeModel } from "../models/Employee";
 
 // Get all employees
 export const getAllEmployees = async (req: Request, res: Response): Promise<void> => {
@@ -31,30 +31,83 @@ export const getEmployeeById = async (req: Request, res: Response): Promise<void
 // Create a new employee
 export const createEmployee = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const newEmployee = new EmployeeModel(req.body);
+		const { employee_type, ...rest } = req.body;
+		console.log("Request body:", req.body);
+		// Select the correct discriminator model based on employee_type
+		let EmployeeModelToUse;
+		switch (employee_type) {
+			case "MasterCrewEmployee":
+				EmployeeModelToUse = MasterCrewEmployeeModel;
+				break;
+			case "SeniorCrewEmployee":
+				EmployeeModelToUse = SeniorCrewEmployeeModel;
+				break;
+			case "Intern":
+				EmployeeModelToUse = InternModel;
+				break;
+			case "Contractor":
+				EmployeeModelToUse = SpecialistTraineeModel;
+				break;
+			default:
+				EmployeeModelToUse = EmployeeModel; // Fallback to base employee
+		}
+
+		// Create and save the employee using the selected model
+		const newEmployee = new EmployeeModelToUse({ employee_type, ...rest });
 		const savedEmployee = await newEmployee.save();
+
 		res.status(201).json(savedEmployee);
 	} catch (error) {
+		console.error("Error creating employee:", error);
 		res.status(400).json({ message: "Error creating employee", error });
 	}
 };
 
-// Update an employee
 export const updateEmployee = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { id } = req.params;
-		const updatedEmployee = await EmployeeModel.findByIdAndUpdate(id, req.body, {
-			new: true,
-		});
+		const { employee_type, ...updateData } = req.body;
+
+		// Select the appropriate model based on the employee_type
+		let EmployeeModelToUse: typeof EmployeeModel | typeof MasterCrewEmployeeModel | typeof SeniorCrewEmployeeModel | typeof InternModel | typeof SpecialistTraineeModel;
+
+		switch (employee_type) {
+			case "MasterCrewEmployee":
+				EmployeeModelToUse = MasterCrewEmployeeModel;
+				break;
+			case "SeniorCrewEmployee":
+				EmployeeModelToUse = SeniorCrewEmployeeModel;
+				break;
+			case "Intern":
+				EmployeeModelToUse = InternModel;
+				break;
+			case "Contractor":
+				EmployeeModelToUse = SpecialistTraineeModel;
+				break;
+			default:
+				EmployeeModelToUse = EmployeeModel;
+		}
+
+		// Explicit type assertion for the selected model
+		const model = EmployeeModelToUse as typeof EmployeeModel;
+
+		// Perform the update using the selected model
+		const updatedEmployee = await model.findByIdAndUpdate(id, updateData, { new: true });
+
 		if (!updatedEmployee) {
 			res.status(404).json({ message: "Employee not found" });
 			return;
 		}
+
 		res.status(200).json(updatedEmployee);
 	} catch (error) {
+		console.error("Error updating employee:", error);
 		res.status(500).json({ message: "Error updating employee", error });
 	}
 };
+
+
+
 
 // Delete an employee
 export const deleteEmployee = async (req: Request, res: Response): Promise<void> => {

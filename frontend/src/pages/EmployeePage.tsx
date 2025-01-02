@@ -102,7 +102,7 @@ const EmployeePage: React.FC = () => {
 											<strong>
 												<i className="bi bi-calendar3 me-2"></i>Date:
 											</strong>{" "}
-											{new Date(report.date).toLocaleDateString()}
+											{new Date(report.week_start_date).toLocaleDateString()}
 										</div>
 										<div>{expandedReportIndex === index ? <i className="bi bi-chevron-up text-primary"></i> : <i className="bi bi-chevron-down text-primary"></i>}</div>
 									</div>
@@ -113,12 +113,6 @@ const EmployeePage: React.FC = () => {
 													<i className="bi bi-person me-2"></i>Evaluator:
 												</strong>{" "}
 												{report.evaluator}
-											</p>
-											<p>
-												<strong>
-													<i className="bi bi-chat-left-dots me-2"></i>Observations:
-												</strong>{" "}
-												{report.observations}
 											</p>
 										</div>
 									)}

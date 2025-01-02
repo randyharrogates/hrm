@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import api from "../api";
-import { EmployeeTypes, IFullTimeEmployee, IPartTimeEmployee, IIntern, IContractor } from "../types/Employee";
+import { EmployeeTypes, IMasterCrew, ISeniorCrew, IIntern, ISpecialistTrainee } from "../types/Employee";
 
 const EmployeeSearch: React.FC = () => {
 	const [query, setQuery] = useState("");
@@ -20,27 +20,29 @@ const EmployeeSearch: React.FC = () => {
 
 	const renderEmployeeDetails = (employee: EmployeeTypes) => {
 		switch (employee.employee_type) {
-			case "FullTime":
-				const fullTime = employee as IFullTimeEmployee;
+			case "MasterCrew":
+				const masterCrew = employee as IMasterCrew;
 				return (
 					<div>
-						<h3>Full-Time Employee</h3>
-						<p>Name: {fullTime.name}</p>
-						<p>Outlet: {fullTime.outlet}</p>
-						<p>Annual Salary: {fullTime.annual_salary}</p>
-						<p>Healthcare Plan: {fullTime.healthcare_plan}</p>
+						<h3>Master Crew Employee</h3>
+						<p>Name: {masterCrew.name}</p>
+						<p>Employee Number: {masterCrew.EN}</p>
+						<p>Outlet: {masterCrew.outlet}</p>
+						<p>Master Crew Remarks: {masterCrew.master_crew_remarks}</p>
 					</div>
 				);
 
-			case "PartTime":
-				const partTime = employee as IPartTimeEmployee;
+			case "SeniorCrew":
+				const seniorCrew = employee as ISeniorCrew;
 				return (
 					<div>
-						<h3>Part-Time Employee</h3>
-						<p>Name: {partTime.name}</p>
-						<p>Position: {partTime.outlet}</p>
-						<p>Hourly Rate: {partTime.hourly_rate}</p>
-						<p>Contract End Date: {new Date(partTime.contract_end_date).toLocaleDateString()}</p>
+						<h3>Senior Crew Employee</h3>
+						<p>Name: {seniorCrew.name}</p>
+						<p>Employee Number: {seniorCrew.EN}</p>
+						<p>Outlet: {seniorCrew.outlet}</p>
+						<p>Hourly Rate: {seniorCrew.hourly_rate}</p>
+						<p>Contract End Date: {new Date(seniorCrew.contract_end_date).toLocaleDateString()}</p>
+						<p>Senior Crew Remarks: {seniorCrew.senior_crew_remarks}</p>
 					</div>
 				);
 
@@ -50,21 +52,24 @@ const EmployeeSearch: React.FC = () => {
 					<div>
 						<h3>Intern</h3>
 						<p>Name: {intern.name}</p>
-						<p>Position: {intern.outlet}</p>
+						<p>Employee Number: {intern.EN}</p>
+						<p>Outlet: {intern.outlet}</p>
 						<p>Mentor: {intern.mentor}</p>
+						<p>Intern Start Date: {new Date(intern.intern_start_date).toLocaleDateString()}</p>
+						<p>Intern End Date: {new Date(intern.intern_end_date).toLocaleDateString()}</p>
 						<p>Duration: {intern.duration_in_months} months</p>
 					</div>
 				);
 
-			case "Contractor":
-				const contractor = employee as IContractor;
+			case "SpecialistTrainee":
+				const specialistTrainee = employee as ISpecialistTrainee;
 				return (
 					<div>
-						<h3>Contractor</h3>
-						<p>Name: {contractor.name}</p>
-						<p>Position: {contractor.outlet}</p>
-						<p>Contract Agency: {contractor.contract_agency}</p>
-						<p>Contract End Date: {new Date(contractor.contract_end_date).toLocaleDateString()}</p>
+						<h3>Specialist Trainee</h3>
+						<p>Name: {specialistTrainee.name}</p>
+						<p>Employee Number: {specialistTrainee.EN}</p>
+						<p>Outlet: {specialistTrainee.outlet}</p>
+						<p>Specialist Trainee Remarks: {specialistTrainee.specialist_trainee_remarks}</p>
 					</div>
 				);
 
@@ -74,10 +79,19 @@ const EmployeeSearch: React.FC = () => {
 	};
 
 	return (
-		<div>
-			<input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by ID" />
-			<button onClick={handleSearch}>Search</button>
-			{result && <div>{renderEmployeeDetails(result)}</div>}
+		<div className="container mt-5">
+			<h2 className="text-center mb-4">
+				<i className="bi bi-search"></i> Employee Search
+			</h2>
+			<div className="mb-3">
+				<input type="text" className="form-control" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Enter Employee ID" />
+			</div>
+			<div className="text-center">
+				<button className="btn btn-primary" onClick={handleSearch}>
+					<i className="bi bi-search"></i> Search
+				</button>
+			</div>
+			{result ? <div className="mt-4 border p-4">{renderEmployeeDetails(result)}</div> : <p className="mt-4 text-center">No employee found.</p>}
 		</div>
 	);
 };
