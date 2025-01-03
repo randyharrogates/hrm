@@ -3,6 +3,7 @@
 export interface IObservationReport {
 	week_start_date: Date;
 	training_centre: string;
+	overall_score: number;
 
 	// Appearance
 	aprons_sop: number;

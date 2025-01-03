@@ -44,15 +44,20 @@ const EmployeeList: React.FC = () => {
 	const filteredEmployees = employees
 		.filter((employee) => {
 			if (filter !== "All" && employee.employee_type !== filter) return false;
+
 			const query = searchQuery.toLowerCase();
+			// Parse dates safely
+			const probationStartDate = employee.probation_start_date ? new Date(employee.probation_start_date) : null;
+			const probationEndDate = employee.probation_end_date ? new Date(employee.probation_end_date) : null;
+
 			return (
 				employee.EN?.toLowerCase().includes(query) ||
 				employee.name?.toLowerCase().includes(query) ||
 				employee.contact?.toLowerCase().includes(query) ||
 				employee.training_outlet?.toLowerCase().includes(query) ||
 				employee.outlet?.toLowerCase().includes(query) ||
-				employee.probation_start_date?.toISOString().toLowerCase().includes(query) ||
-				employee.probation_end_date?.toISOString().toLowerCase().includes(query) ||
+				(probationStartDate && probationStartDate.toISOString().toLowerCase().includes(query)) ||
+				(probationEndDate && probationEndDate.toISOString().toLowerCase().includes(query)) ||
 				employee.remarks?.toLowerCase().includes(query)
 			);
 		})
@@ -114,7 +119,9 @@ const EmployeeList: React.FC = () => {
 						<div key={employee._id} className="list-group-item d-flex justify-content-between align-items-center">
 							<div>
 								<span className="fw-bold text-primary">EN:</span> {employee.EN} | <span className="fw-bold text-primary">Name:</span> {employee.name} |{" "}
-								<span className="fw-bold text-primary">Type:</span> {employee.employee_type}
+								<span className="fw-bold text-primary">Contact:</span> {employee.contact} | <span className="fw-bold text-primary">Employee Type:</span> {employee.employee_type} |{" "}
+								<span className="fw-bold text-primary">Outlet:</span> {employee.outlet} | <span className="fw-bold text-primary">Active:</span>{" "}
+								{employee.current_employee ? "Yes" : "No"}
 							</div>
 							<div>
 								<button className="btn btn-sm btn-outline-warning me-2" onClick={() => handleEdit(employee._id)}>

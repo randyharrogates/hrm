@@ -39,7 +39,7 @@ const ObservationReportSchema: Schema = new Schema({
 	grooming: { type: Number, required: true },
 	facial_exp: { type: Number, required: true },
 	appearance_score: { type: Number, required: true },
-	app_remarks: { type: String, required: true },
+	app_remarks: { type: String, required: false },
 
 	// Equipment
 	handling_knowledge: { type: Number, required: true },
@@ -47,7 +47,7 @@ const ObservationReportSchema: Schema = new Schema({
 	accounting: { type: Number, required: true },
 	eq_knowledge: { type: String, required: true },
 	eq_score: { type: Number, required: true },
-	eq_remarks: { type: String, required: true },
+	eq_remarks: { type: String, required: false },
 
 	// Daily Ops
 	product_knowledge: { type: Number, required: true },
@@ -62,13 +62,13 @@ const ObservationReportSchema: Schema = new Schema({
 	applicances: { type: Number, required: true },
 	floor_cleanliness: { type: Number, required: true },
 	daily_ops_score: { type: Number, required: true },
-	daily_ops_remarks: { type: String, required: true },
+	daily_ops_remarks: { type: String, required: false },
 
 	// Batter Mixing/Cooking
 	mixing_sop: { type: Number, required: true },
 	cooking_quality: { type: Number, required: true },
-	cooking_remarks: { type: String, required: true },
 	cooking_score: { type: Number, required: true },
+	cooking_remarks: { type: String, required: false },
 
 	// Final Product Quality
 	skin_quality: { type: Number, required: true },
@@ -77,7 +77,7 @@ const ObservationReportSchema: Schema = new Schema({
 	cut_size: { type: Number, required: true },
 	rejected_handling: { type: Number, required: true },
 	final_product_score: { type: Number, required: true },
-	final_product_remarks: { type: String, required: true },
+	final_product_remarks: { type: String, required: false },
 
 	// Communication
 	team_conversation: { type: Number, required: true },
@@ -86,7 +86,7 @@ const ObservationReportSchema: Schema = new Schema({
 	broadcasting: { type: Number, required: true },
 	instruction_understanding: { type: Number, required: true },
 	communication_score: { type: Number, required: true },
-	communication_remarks: { type: String, required: true },
+	communication_remarks: { type: String, required: false },
 
 	// Teamwork
 	team_efficiency: { type: Number, required: true },
@@ -94,7 +94,7 @@ const ObservationReportSchema: Schema = new Schema({
 	camaraderie: { type: Number, required: true },
 	assist_initiative: { type: Number, required: true },
 	teamwork_score: { type: Number, required: true },
-	teamwork_remarks: { type: String, required: true },
+	teamwork_remarks: { type: String, required: false },
 
 	// Customer Service
 	politeness: { type: Number, required: true },
@@ -102,28 +102,28 @@ const ObservationReportSchema: Schema = new Schema({
 	upsell: { type: Number, required: true },
 	empathy: { type: Number, required: true },
 	customer_service_score: { type: Number, required: true },
-	customer_service_remarks: { type: String, required: true },
+	customer_service_remarks: { type: String, required: false },
 
 	// Problem Solving
 	calmness: { type: Number, required: true },
 	solving_effectiveness: { type: Number, required: true },
 	reporting: { type: Number, required: true },
 	problem_solving_score: { type: Number, required: true },
-	problem_solving_remarks: { type: String, required: true },
+	problem_solving_remarks: { type: String, required: false },
 
 	// Industry Knowledge
 	food_safety: { type: Number, required: true },
 	safe_workplace: { type: Number, required: true },
 	pest_control: { type: Number, required: true },
 	industry_knowledge_score: { type: Number, required: true },
-	industry_knowledge_remarks: { type: String, required: true },
+	industry_knowledge_remarks: { type: String, required: false },
 
 	// Initiative and Attitude
 	willingness_to_cover: { type: Number, required: true },
 	willingness_to_do_more: { type: Number, required: true },
 	work_independantly: { type: Number, required: true },
 	attitude_score: { type: Number, required: true },
-	attitude_remarks: { type: String, required: true },
+	attitude_remarks: { type: String, required: false },
 
 	// KPI Awareness
 	cust_satisfaction: { type: Number, required: true },
@@ -132,7 +132,7 @@ const ObservationReportSchema: Schema = new Schema({
 	individual: { type: Number, required: true },
 	team: { type: Number, required: true },
 	kpi_awareness_score: { type: Number, required: true },
-	kpi_awareness_remarks: { type: String, required: true },
+	kpi_awareness_remarks: { type: String, required: false },
 
 	evaluator: { type: String },
 });
