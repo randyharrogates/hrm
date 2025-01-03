@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api, { deleteEmployee, getEmployeeById, updateEmployee } from "../api";
+import api, { deleteEmployee, getEmployeeById } from "../api";
 import { EmployeeTypes } from "../types/Employee";
 
 const EmployeeList: React.FC = () => {
