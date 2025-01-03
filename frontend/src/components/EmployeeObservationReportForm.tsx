@@ -201,6 +201,7 @@ const fieldConfigs = [
 
 const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps> = ({ observationReports, setObservationReports }) => {
 	const [localReports, setLocalReports] = useState<ObservationReport[]>(observationReports);
+	const [showModal, setShowModal] = useState(false); // State to control modal visibility
 	const parseDate = (dateString: string | Date | undefined): Date | null => {
 		if (!dateString) return null; // Handle undefined or empty values
 		if (dateString instanceof Date) return dateString; // If already a Date object, return it
@@ -322,12 +323,42 @@ const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps
 					<button
 						type="button"
 						className="btn btn-success mt-4"
-						onClick={syncToParent} // Use syncToParent to explicitly update the parent state
+						onClick={() => {
+							syncToParent(); // Sync changes to parent
+							setShowModal(true); // Show the modal
+						}} // Use syncToParent to explicitly update the parent state
 					>
 						Save Reports Changes
 					</button>
 				</div>
 			</div>
+			{/* Bootstrap Modal */}
+			{showModal && (
+				<div className="modal show" tabIndex={-1} style={{ display: "block" }}>
+					<div className="modal-dialog">
+						<div className="modal-content">
+							<div className="modal-header">
+								<h5 className="modal-title">
+									<i className="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+									Reminder
+								</h5>
+								<button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+							</div>
+							<div className="modal-body">
+								<p>
+									Reports have been saved temporarily. Please click the
+									<strong> Update</strong> or <strong>Create Employee</strong> button to save the employee data.
+								</p>
+							</div>
+							<div className="modal-footer">
+								<button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
+									Close
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };
