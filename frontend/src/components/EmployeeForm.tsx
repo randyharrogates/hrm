@@ -2,16 +2,29 @@
 
 import React, { useState } from "react";
 import api from "../api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { EmployeeTypes, IMasterCrew, ISeniorCrew, IIntern, ISpecialistTrainee, ObservationReport } from "../types/Employee";
 import EmployeeObservationReportForm from "./EmployeeObservationReportForm";
+import { initializeObservationReport } from "./EmployeeObservationReportForm";
 
-const EmployeeForm: React.FC = () => {
-	const [employee, setEmployee] = useState<Partial<EmployeeTypes>>({
-		employee_type: "Intern",
-		current_employee: true,
-		observationReports: [],
-	});
+interface EmployeeFormProps {
+	initialEmployee?: Partial<EmployeeTypes>; // Optional initial employee for editing
+	onSubmit: (employee: Partial<EmployeeTypes>) => void; // Callback for form submission
+	isEditing?: boolean; // Editing flag
+}
+
+const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false }) => {
+	const location = useLocation();
+	const initialEmployee = location.state?.employee || {}; // Retrieved state
+	const [employee, setEmployee] = useState<Partial<EmployeeTypes>>(
+		isEditing
+			? { ...initialEmployee, observationReports: initialEmployee.observationReports || [] }
+			: {
+					employee_type: "Intern",
+					current_employee: true,
+					observationReports: [initializeObservationReport()], // Start with one empty observation report
+			  }
+	);
 	const navigate = useNavigate();
 
 	// Type guards
@@ -27,10 +40,10 @@ const EmployeeForm: React.FC = () => {
 		}));
 	};
 
-	const handleAddObservation = (observation: ObservationReport) => {
+	const handleAddObservation = (updatedReports: ObservationReport[]) => {
 		setEmployee((prev) => ({
 			...prev,
-			observationReports: [...(prev.observationReports || []), observation],
+			observationReports: updatedReports, // Update the employee state with the finalized reports
 		}));
 	};
 
@@ -43,12 +56,24 @@ const EmployeeForm: React.FC = () => {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!employee.employee_type) {
-			alert("Please select an employee type.");
-			return;
-		}
 		try {
-			await api.post("/", employee);
+			const updatedEmployee = { ...employee };
+			// Sync latest observation reports before submitting
+			console.log("Submitting employee:", updatedEmployee);
+			setEmployee((prev) => ({
+				...prev,
+				observationReports: employee.observationReports || [],
+			}));
+			console.log("Submitting employee:", employee);
+			if (employee._id) {
+				// Editing mode
+				await api.put(`/:${employee._id}`, employee); // Assuming your API endpoint for update is `/id`
+				alert("Employee updated successfully!");
+			} else {
+				// Adding a new employee
+				await api.post("/", employee);
+				alert("Employee added successfully!");
+			}
 			navigate("/");
 		} catch (error) {
 			console.error("Error submitting employee:", error);
@@ -114,7 +139,7 @@ const EmployeeForm: React.FC = () => {
 						type="date"
 						id="probation_start_date"
 						className="form-control"
-						value={employee.probation_start_date ? employee.probation_start_date.toISOString().split("T")[0] : ""}
+						value={employee.probation_start_date ? new Date(employee.probation_start_date).toISOString().split("T")[0] : ""}
 						onChange={(e) => handleInputChange("probation_start_date", new Date(e.target.value))}
 						required
 					/>
@@ -127,7 +152,7 @@ const EmployeeForm: React.FC = () => {
 						type="date"
 						id="probation_end_date"
 						className="form-control"
-						value={employee.probation_end_date ? employee.probation_end_date.toISOString().split("T")[0] : ""}
+						value={employee.probation_end_date ? new Date(employee.probation_end_date).toISOString().split("T")[0] : ""}
 						onChange={(e) => handleInputChange("probation_end_date", new Date(e.target.value))}
 					/>
 				</div>
@@ -384,25 +409,23 @@ const EmployeeForm: React.FC = () => {
 				)}
 
 				<div className="col-12">
-					{/* Render existing observation reports */}
-					{employee.observationReports?.map((report, index) => (
-						<div key={index} className="border rounded p-3 mb-3">
-							<h5>Report {index + 1}</h5>
-
-							<button type="button" className="btn btn-danger btn-sm" onClick={() => handleRemoveObservation(index)}>
-								Remove Report
-							</button>
-						</div>
-					))}
-
 					{/* Add new observation reports */}
-					<EmployeeObservationReportForm onAddObservation={handleAddObservation} />
+					<EmployeeObservationReportForm
+						observationReports={employee.observationReports || []}
+						setObservationReports={(reports) => {
+							console.log("Updating observationReports with:", reports);
+							setEmployee((prev) => ({
+								...prev,
+								observationReports: typeof reports === "function" ? reports(prev.observationReports || []) : reports,
+							}));
+						}}
+					/>
 				</div>
 
 				{/* Submit Button */}
 				<div className="col-12">
 					<button type="submit" className="btn btn-primary w-100">
-						<i className="bi bi-check-circle"></i> Submit
+						{isEditing ? "Update Employee" : "Add Employee"}
 					</button>
 				</div>
 			</form>

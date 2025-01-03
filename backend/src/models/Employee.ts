@@ -196,4 +196,4 @@ const SpecialistTraineeModel = EmployeeModel.discriminator<ISpecialistTrainee>(
 	})
 );
 
-export { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, SpecialistTraineeModel, InternModel };
+export { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, SpecialistTraineeModel, InternModel, ObservationReportSchema };

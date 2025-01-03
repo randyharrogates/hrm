@@ -1,7 +1,8 @@
 /** @format */
 
 import { Request, Response } from "express";
-import { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, InternModel, SpecialistTraineeModel } from "../models/Employee";
+import mongoose from "mongoose";
+import { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, InternModel, SpecialistTraineeModel, ObservationReportSchema } from "../models/Employee";
 
 // Get all employees
 export const getAllEmployees = async (req: Request, res: Response): Promise<void> => {
@@ -31,35 +32,44 @@ export const getEmployeeById = async (req: Request, res: Response): Promise<void
 // Create a new employee
 export const createEmployee = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const { employee_type, ...rest } = req.body;
-		console.log("Request body:", req.body);
-		// Select the correct discriminator model based on employee_type
+		const { employee_type, observationReports = [], ...rest } = req.body;
+		console.log("Received Data:", req.body);
+
+		// Select the correct discriminator model
 		let EmployeeModelToUse;
 		switch (employee_type) {
-			case "MasterCrewEmployee":
+			case "MasterCrew":
 				EmployeeModelToUse = MasterCrewEmployeeModel;
 				break;
-			case "SeniorCrewEmployee":
+			case "SeniorCrew":
 				EmployeeModelToUse = SeniorCrewEmployeeModel;
 				break;
 			case "Intern":
 				EmployeeModelToUse = InternModel;
 				break;
-			case "Contractor":
+			case "SpecialistTrainee":
 				EmployeeModelToUse = SpecialistTraineeModel;
 				break;
 			default:
-				EmployeeModelToUse = EmployeeModel; // Fallback to base employee
+				EmployeeModelToUse = EmployeeModel;
 		}
 
-		// Create and save the employee using the selected model
-		const newEmployee = new EmployeeModelToUse({ employee_type, ...rest });
+		// Create new employee
+		const newEmployee = new EmployeeModelToUse({
+			...rest,
+			employee_type,
+			observationReports: observationReports, // Use validated reports
+		});
+		console.log(`Using model: ${EmployeeModelToUse.modelName}`);
 		const savedEmployee = await newEmployee.save();
-
 		res.status(201).json(savedEmployee);
-	} catch (error) {
+	} catch (error: any) {
+		if (error.name === "ValidationError") {
+			res.status(400).json({ message: "Validation failed", errors: error.errors });
+			return;
+		}
 		console.error("Error creating employee:", error);
-		res.status(400).json({ message: "Error creating employee", error });
+		res.status(500).json({ message: "Error creating employee", error });
 	}
 };
 
@@ -92,7 +102,8 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
 		const model = EmployeeModelToUse as typeof EmployeeModel;
 
 		// Perform the update using the selected model
-		const updatedEmployee = await model.findByIdAndUpdate(id, updateData, { new: true });
+		const sanitizedId = id.replace(/^:/, "");
+		const updatedEmployee = await model.findByIdAndUpdate(sanitizedId, updateData, { new: true });
 
 		if (!updatedEmployee) {
 			res.status(404).json({ message: "Employee not found" });
@@ -105,9 +116,6 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
 		res.status(500).json({ message: "Error updating employee", error });
 	}
 };
-
-
-
 
 // Delete an employee
 export const deleteEmployee = async (req: Request, res: Response): Promise<void> => {
@@ -143,7 +151,7 @@ export const getEmployeeObservations = async (req: Request, res: Response): Prom
 export const addEmployeeObservation = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { id } = req.params;
-		const { date, observations, evaluator } = req.body;
+		const observationReport = req.body; // Expect the client to send a complete observation report object
 
 		const employee = await EmployeeModel.findById(id);
 		if (!employee) {
@@ -151,10 +159,18 @@ export const addEmployeeObservation = async (req: Request, res: Response): Promi
 			return;
 		}
 
-		employee.observationReports.push({ date, observations, evaluator });
+		// Push the observation report directly; Mongoose will validate against the schema
+		employee.observationReports.push(observationReport);
 		await employee.save();
+
 		res.status(201).json(employee);
-	} catch (error) {
-		res.status(400).json({ message: "Error adding observation report", error });
+	} catch (error: any) {
+		// Handle validation errors
+		if (error.name === "ValidationError") {
+			res.status(400).json({ message: "Validation failed", errors: error.errors });
+		} else {
+			res.status(500).json({ message: "Error adding observation report", error });
+		}
 	}
 };
+
