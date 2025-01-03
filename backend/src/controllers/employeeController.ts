@@ -1,7 +1,6 @@
 /** @format */
 
 import { Request, Response } from "express";
-import mongoose from "mongoose";
 import { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, InternModel, SpecialistTraineeModel, ObservationReportSchema } from "../models/Employee";
 
 // Get all employees
@@ -62,6 +61,7 @@ export const createEmployee = async (req: Request, res: Response): Promise<void>
 		});
 		console.log(`Using model: ${EmployeeModelToUse.modelName}`);
 		const savedEmployee = await newEmployee.save();
+		await EmployeeModel.updateOverallScore(savedEmployee._id);
 		res.status(201).json(savedEmployee);
 	} catch (error: any) {
 		if (error.name === "ValidationError") {
@@ -109,6 +109,8 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
 			res.status(404).json({ message: "Employee not found" });
 			return;
 		}
+		// Update overall grading score
+		await EmployeeModel.updateOverallScore(updatedEmployee._id); // Update overall grading score
 
 		res.status(200).json(updatedEmployee);
 	} catch (error) {

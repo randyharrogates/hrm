@@ -33,6 +33,7 @@ export interface ISpecialistTrainee extends IEmployee {
 const ObservationReportSchema: Schema = new Schema({
 	week_start_date: { type: Date, required: true },
 	training_centre: { type: String, required: true },
+	overall_score: { type: Number, required: true },
 
 	// Appearance
 	aprons_sop: { type: Number, required: true },
@@ -154,8 +155,29 @@ const BaseEmployeeSchema: Schema = new Schema({
 	observationReports: { type: [ObservationReportSchema], default: [] },
 });
 
+BaseEmployeeSchema.statics.updateOverallScore = async function (employeeId: string) {
+	const employee = await this.findById(employeeId);
+	if (!employee) throw new Error("Employee not found");
+
+	if (employee.observationReports.length > 0) {
+		const totalScore = employee.observationReports.reduce((sum: number, report: IObservationReport) => {
+			return sum + parseFloat(report.overall_score.toFixed(2));
+		}, 0);
+
+		employee.overall_grading_score = parseFloat((totalScore / employee.observationReports.length).toFixed(2));
+	} else {
+		employee.overall_grading_score = 0; // Set to 0 if there are no observation reports
+	}
+
+	await employee.save();
+};
+
+interface IEmployeeModel extends Model<IEmployee> {
+	updateOverallScore(employeeId: string): Promise<void>;
+}
+
 // Create Models with Discriminators
-const EmployeeModel = mongoose.model<IEmployee>("Employee", BaseEmployeeSchema);
+const EmployeeModel = mongoose.model<IEmployee, IEmployeeModel>("Employee", BaseEmployeeSchema);
 
 const MasterCrewEmployeeModel = EmployeeModel.discriminator<IMasterCrew>(
 	"MasterCrewEmployee",

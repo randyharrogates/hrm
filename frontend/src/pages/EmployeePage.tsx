@@ -171,6 +171,9 @@ const EmployeePage: React.FC = () => {
 					<p>
 						<strong>Current Employee:</strong> {employee.current_employee ? "Yes" : "No"}
 					</p>
+					<p>
+						<strong>Overall Grading Score:</strong> {employee.overall_grading_score || 0}
+					</p>
 					{/* Render discriminator-specific fields */}
 					{renderDiscriminatorFields()}
 				</div>

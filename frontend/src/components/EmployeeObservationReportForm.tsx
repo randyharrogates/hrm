@@ -11,6 +11,7 @@ interface EmployeeObservationReportFormProps {
 export const initializeObservationReport = (): ObservationReport => ({
 	week_start_date: new Date(),
 	training_centre: "",
+	overall_score: 0,
 	aprons_sop: 1,
 	grooming: 1,
 	facial_exp: 1,
@@ -94,6 +95,7 @@ const fieldConfigs = [
 	// General Section
 	{ id: "week_start_date", label: "Week Start Date", type: "date", section: "General", required: true },
 	{ id: "training_centre", label: "Training Centre", type: "text", section: "General", required: true },
+	{ id: "overall_score", label: "Overall Score", type: "number", min: 0, max: 5, step: 1, section: "General", required: true },
 
 	// Appearance Section
 	{ id: "aprons_sop", label: "SOP for Aprons", type: "number", min: 1, max: 5, section: "Appearance", required: true },
@@ -285,6 +287,7 @@ const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps
 											{...(field.min !== undefined && { min: field.min })}
 											{...(field.max !== undefined && { max: field.max })}
 											{...((field.required ?? true) && { required: true })} // Default to `true` if not specified
+											{...(field.step !== undefined && { step: field.step })}
 										/>
 									</div>
 								))}

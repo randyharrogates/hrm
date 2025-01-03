@@ -18,7 +18,16 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 	const initialEmployee = location.state?.employee || {}; // Retrieved state
 	const [employee, setEmployee] = useState<Partial<EmployeeTypes>>(
 		isEditing
-			? { ...initialEmployee, observationReports: initialEmployee.observationReports || [] }
+			? {
+					...initialEmployee,
+					forteen_hours_shift: initialEmployee.forteen_hours_shift ? new Date(initialEmployee.forteen_hours_shift) : undefined,
+					verbal_and_practical: initialEmployee.verbal_and_practical ? new Date(initialEmployee.verbal_and_practical) : undefined,
+					contract_start_date: initialEmployee.contract_start_date ? new Date(initialEmployee.contract_start_date) : undefined,
+					intern_start_date: initialEmployee.intern_start_date ? new Date(initialEmployee.intern_start_date) : undefined,
+					intern_end_date: initialEmployee.intern_end_date ? new Date(initialEmployee.intern_end_date) : undefined,
+					contract_end_date: initialEmployee.contract_end_date ? new Date(initialEmployee.contract_end_date) : undefined,
+					observationReports: initialEmployee.observationReports || [],
+			  }
 			: {
 					employee_type: "Intern",
 					current_employee: true,
@@ -26,6 +35,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 			  }
 	);
 	const navigate = useNavigate();
+    console.log("Employee Data returned:", employee);
 
 	// Type guards
 	const isMasterCrew = (emp: Partial<EmployeeTypes>): emp is IMasterCrew => emp.employee_type === "MasterCrew";
@@ -218,13 +228,13 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 						{/* Fourteen Hours Shift */}
 						<div className="col-md-6">
 							<label htmlFor="forteen_hours_shift" className="form-label mt-4">
-								Fourteen Hours Shift
+								Forteen Hours Shift
 							</label>
 							<input
 								type="date"
 								id="forteen_hours_shift"
 								className="form-control"
-								value={employee.forteen_hours_shift ? employee.forteen_hours_shift.toISOString().split("T")[0] : ""}
+								value={employee.forteen_hours_shift ? new Date(employee.forteen_hours_shift).toISOString().split("T")[0] : ""}
 								onChange={(e) => handleInputChange("forteen_hours_shift", new Date(e.target.value))}
 							/>
 						</div>
@@ -238,7 +248,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 								type="date"
 								id="verbal_and_practical"
 								className="form-control"
-								value={employee.verbal_and_practical ? employee.verbal_and_practical.toISOString().split("T")[0] : ""}
+								value={employee.verbal_and_practical ? new Date(employee.verbal_and_practical).toISOString().split("T")[0] : ""}
 								onChange={(e) => handleInputChange("verbal_and_practical", new Date(e.target.value))}
 							/>
 						</div>
@@ -268,7 +278,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 								type="date"
 								id="contract_end_date"
 								className="form-control"
-								value={employee.contract_end_date ? employee.contract_end_date.toISOString().split("T")[0] : ""}
+								value={employee.contract_end_date ? new Date(employee.contract_end_date).toISOString().split("T")[0] : ""}
 								onChange={(e) => handleInputChange("contract_end_date", new Date(e.target.value))}
 							/>
 						</div>
@@ -295,7 +305,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 									type="date"
 									id="intern_start_date"
 									className="form-control"
-									value={employee.intern_start_date ? employee.intern_start_date.toISOString().split("T")[0] : ""}
+									value={employee.intern_start_date ? new Date(employee.intern_start_date).toISOString().split("T")[0] : ""}
 									onChange={(e) => handleInputChange("intern_start_date", new Date(e.target.value))}
 									required
 								/>
@@ -310,7 +320,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 									type="date"
 									id="intern_end_date"
 									className="form-control"
-									value={employee.intern_end_date ? employee.intern_end_date.toISOString().split("T")[0] : ""}
+									value={employee.intern_end_date ? new Date(employee.intern_end_date).toISOString().split("T")[0] : ""}
 									onChange={(e) => handleInputChange("intern_end_date", new Date(e.target.value))}
 								/>
 							</div>
@@ -386,7 +396,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 									type="date"
 									id="forteen_hours_shift"
 									className="form-control"
-									value={employee.forteen_hours_shift ? employee.forteen_hours_shift.toISOString().split("T")[0] : ""}
+									value={employee.forteen_hours_shift instanceof Date ? employee.forteen_hours_shift.toISOString().split("T")[0] : ""}
 									onChange={(e) => handleInputChange("forteen_hours_shift", new Date(e.target.value))}
 								/>
 							</div>
@@ -400,7 +410,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 									type="date"
 									id="verbal_and_practical"
 									className="form-control"
-									value={employee.verbal_and_practical ? employee.verbal_and_practical.toISOString().split("T")[0] : ""}
+									value={employee.verbal_and_practical instanceof Date ? employee.verbal_and_practical.toISOString().split("T")[0] : ""}
 									onChange={(e) => handleInputChange("verbal_and_practical", new Date(e.target.value))}
 								/>
 							</div>
