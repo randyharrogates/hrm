@@ -11,6 +11,7 @@ const EmployeeList: React.FC = () => {
 	const [searchQuery, setSearchQuery] = useState<string>("");
 	const [filter, setFilter] = useState<string>("All");
 	const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+	const [sortByGrading, setSortByGrading] = useState<boolean>(false); // New state to track sorting by grading score
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -22,8 +23,17 @@ const EmployeeList: React.FC = () => {
 	}, []);
 
 	const handleDelete = async (id: string) => {
-		await deleteEmployee(id);
-		setEmployees(employees.filter((emp) => emp._id !== id));
+		const confirmDelete = window.confirm("Are you sure you want to delete this employee?");
+		if (confirmDelete) {
+			try {
+				await deleteEmployee(id);
+				setEmployees(employees.filter((emp) => emp._id !== id));
+				alert("Employee deleted successfully.");
+			} catch (error) {
+				console.error("Error deleting employee:", error);
+				alert("An error occurred while deleting the employee.");
+			}
+		}
 	};
 
 	const handleEdit = async (id: string) => {
@@ -46,7 +56,6 @@ const EmployeeList: React.FC = () => {
 			if (filter !== "All" && employee.employee_type !== filter) return false;
 
 			const query = searchQuery.toLowerCase();
-			// Parse dates safely
 			const probationStartDate = employee.probation_start_date ? new Date(employee.probation_start_date) : null;
 			const probationEndDate = employee.probation_end_date ? new Date(employee.probation_end_date) : null;
 
@@ -62,6 +71,11 @@ const EmployeeList: React.FC = () => {
 			);
 		})
 		.sort((a, b) => {
+			if (sortByGrading) {
+				const aScore = a.overall_grading_score || 0;
+				const bScore = b.overall_grading_score || 0;
+				return sortOrder === "asc" ? aScore - bScore : bScore - aScore;
+			}
 			const aValue = a.name || "";
 			const bValue = b.name || "";
 			if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
@@ -105,6 +119,15 @@ const EmployeeList: React.FC = () => {
 						<option value="asc">Ascending</option>
 						<option value="desc">Descending</option>
 					</select>
+				</div>
+			</div>
+
+			{/* Button to Sort by Grading Score */}
+			<div className="row mb-4">
+				<div className="col-md-12">
+					<button className="btn btn-outline-primary" onClick={() => setSortByGrading(!sortByGrading)}>
+						{sortByGrading ? "Sort by Name" : "Sort by Grading Score"}
+					</button>
 				</div>
 			</div>
 
