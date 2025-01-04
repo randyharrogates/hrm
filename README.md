@@ -33,8 +33,8 @@ A simple Human Resource Management (HRM) system built with:
 
 #### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/hrm-system.git
-cd hrm-system
+git clone https://github.com/randyharrogates/hrm.git
+cd hrm
 ```
 
 #### 2. Setup the backend
