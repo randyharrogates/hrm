@@ -216,6 +216,11 @@ const EmployeePage: React.FC = () => {
 															<strong>Evaluator:</strong> {report.evaluator}
 														</p>
 													</div>
+													<div className="col-md-6">
+														<p>
+															<strong>Overall score:</strong> {report.overall_score}
+														</p>
+													</div>
 												</div>
 											</div>
 
