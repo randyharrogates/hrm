@@ -143,8 +143,8 @@ const EmployeeList: React.FC = () => {
 							<div>
 								<span className="fw-bold text-primary">EN:</span> {employee.EN} | <span className="fw-bold text-primary">Name:</span> {employee.name} |{" "}
 								<span className="fw-bold text-primary">Contact:</span> {employee.contact} | <span className="fw-bold text-primary">Employee Type:</span> {employee.employee_type} |{" "}
-								<span className="fw-bold text-primary">Outlet:</span> {employee.outlet} | <span className="fw-bold text-primary">Active:</span>{" "}
-								{employee.current_employee ? "Yes" : "No"} | <span className="fw-bold text-primary">Grade:</span> {employee.overall_grading_score}
+								<span className="fw-bold text-primary">Outlet:</span> {employee.outlet} | <span className="fw-bold text-primary">Terminated?:</span>{" "}
+								{employee.terminated ? "Yes" : "No"} | <span className="fw-bold text-primary">Grade:</span> {employee.overall_grading_score}
 							</div>
 							<div>
 								<button className="btn btn-sm btn-outline-warning me-2" onClick={() => handleEdit(employee._id)}>

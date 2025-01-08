@@ -56,7 +56,7 @@ npx ts-node-dev src/server.ts
 
 #### 3. Setup the frontend
 ```bash
-cd hrm-frontend
+cd frontend
 npm install
 ```
 

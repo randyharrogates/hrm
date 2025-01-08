@@ -39,7 +39,6 @@ const ObservationReportSchema: Schema = new Schema({
 	aprons_sop: { type: Number, required: true },
 	grooming: { type: Number, required: true },
 	facial_exp: { type: Number, required: true },
-	appearance_score: { type: Number, required: true },
 	app_remarks: { type: String, required: false },
 
 	// Equipment
@@ -47,7 +46,6 @@ const ObservationReportSchema: Schema = new Schema({
 	location_knowledge: { type: Number, required: true },
 	accounting: { type: Number, required: true },
 	eq_knowledge: { type: String, required: true },
-	eq_score: { type: Number, required: true },
 	eq_remarks: { type: String, required: false },
 
 	// Daily Ops
@@ -62,13 +60,11 @@ const ObservationReportSchema: Schema = new Schema({
 	safe_storage: { type: Number, required: true },
 	applicances: { type: Number, required: true },
 	floor_cleanliness: { type: Number, required: true },
-	daily_ops_score: { type: Number, required: true },
 	daily_ops_remarks: { type: String, required: false },
 
 	// Batter Mixing/Cooking
 	mixing_sop: { type: Number, required: true },
 	cooking_quality: { type: Number, required: true },
-	cooking_score: { type: Number, required: true },
 	cooking_remarks: { type: String, required: false },
 
 	// Final Product Quality
@@ -77,7 +73,6 @@ const ObservationReportSchema: Schema = new Schema({
 	foreign_object_check: { type: Number, required: true },
 	cut_size: { type: Number, required: true },
 	rejected_handling: { type: Number, required: true },
-	final_product_score: { type: Number, required: true },
 	final_product_remarks: { type: String, required: false },
 
 	// Communication
@@ -86,7 +81,6 @@ const ObservationReportSchema: Schema = new Schema({
 	listening_skills: { type: Number, required: true },
 	broadcasting: { type: Number, required: true },
 	instruction_understanding: { type: Number, required: true },
-	communication_score: { type: Number, required: true },
 	communication_remarks: { type: String, required: false },
 
 	// Teamwork
@@ -94,7 +88,6 @@ const ObservationReportSchema: Schema = new Schema({
 	rotation_confidence: { type: Number, required: true },
 	camaraderie: { type: Number, required: true },
 	assist_initiative: { type: Number, required: true },
-	teamwork_score: { type: Number, required: true },
 	teamwork_remarks: { type: String, required: false },
 
 	// Customer Service
@@ -102,28 +95,24 @@ const ObservationReportSchema: Schema = new Schema({
 	service: { type: Number, required: true },
 	upsell: { type: Number, required: true },
 	empathy: { type: Number, required: true },
-	customer_service_score: { type: Number, required: true },
 	customer_service_remarks: { type: String, required: false },
 
 	// Problem Solving
 	calmness: { type: Number, required: true },
 	solving_effectiveness: { type: Number, required: true },
 	reporting: { type: Number, required: true },
-	problem_solving_score: { type: Number, required: true },
 	problem_solving_remarks: { type: String, required: false },
 
 	// Industry Knowledge
 	food_safety: { type: Number, required: true },
 	safe_workplace: { type: Number, required: true },
 	pest_control: { type: Number, required: true },
-	industry_knowledge_score: { type: Number, required: true },
 	industry_knowledge_remarks: { type: String, required: false },
 
 	// Initiative and Attitude
 	willingness_to_cover: { type: Number, required: true },
 	willingness_to_do_more: { type: Number, required: true },
 	work_independantly: { type: Number, required: true },
-	attitude_score: { type: Number, required: true },
 	attitude_remarks: { type: String, required: false },
 
 	// KPI Awareness
@@ -132,7 +121,6 @@ const ObservationReportSchema: Schema = new Schema({
 	sales: { type: Number, required: true },
 	individual: { type: Number, required: true },
 	team: { type: Number, required: true },
-	kpi_awareness_score: { type: Number, required: true },
 	kpi_awareness_remarks: { type: String, required: false },
 
 	evaluator: { type: String },
@@ -149,11 +137,54 @@ const BaseEmployeeSchema: Schema = new Schema({
 	outlet: { type: String, required: true },
 	probation_start_date: { type: Date },
 	probation_end_date: { type: Date },
+	extended_probation: { type: Boolean, default: false },
+	passed_probation: { type: Boolean, default: false },
+	terminated: { type: Boolean, default: false },
 	remarks: { type: String },
-	current_employee: { type: Boolean, default: true },
 	overall_grading_score: { type: Number, default: 0 },
 	observationReports: { type: [ObservationReportSchema], default: [] },
 });
+
+BaseEmployeeSchema.pre("save", async function (next) {
+	// Access the employee document
+	const employee = this as unknown as IEmployee; // Type assertion
+
+	// Check if observationReports is an array
+	if (Array.isArray(employee.observationReports) && employee.observationReports.length > 0) {
+		employee.observationReports = employee.observationReports.map((report) => {
+			// Get all numeric fields except remarks
+			const numericFields = Object.keys(report).filter((field) => {
+				return !field.endsWith("_remarks") && typeof report[field as keyof IObservationReport] === "number";
+			});
+
+			// Calculate average score
+			const total = numericFields.reduce((sum, field) => {
+				return sum + (report[field as keyof IObservationReport] as number);
+			}, 0);
+			const average = total / numericFields.length;
+
+			// Update the overall_score for the report
+			report.overall_score = parseFloat(average.toFixed(2));
+
+			return report;
+		});
+	}
+
+	// Calculate and update the employee's overall grading score
+	if (employee.observationReports.length > 0) {
+		const totalScore = employee.observationReports.reduce((sum, report) => {
+			return sum + report.overall_score;
+		}, 0);
+
+		employee.overall_grading_score = parseFloat((totalScore / employee.observationReports.length).toFixed(2));
+	} else {
+		employee.overall_grading_score = 0; // Set to 0 if no observation reports exist
+	}
+
+	next();
+});
+
+
 
 BaseEmployeeSchema.statics.updateOverallScore = async function (employeeId: string) {
 	const employee = await this.findById(employeeId);

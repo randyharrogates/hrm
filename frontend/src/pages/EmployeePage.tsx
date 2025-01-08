@@ -169,7 +169,7 @@ const EmployeePage: React.FC = () => {
 						<strong>Remarks:</strong> {employee.remarks || "None"}
 					</p>
 					<p>
-						<strong>Current Employee:</strong> {employee.current_employee ? "Yes" : "No"}
+						<strong>Terminated?:</strong> {employee.terminated ? "Yes" : "No"}
 					</p>
 					<p>
 						<strong>Overall Grading Score:</strong> {employee.overall_grading_score || 0}
@@ -243,9 +243,6 @@ const EmployeePage: React.FC = () => {
 													</div>
 													<div className="col-md-6">
 														<p>
-															<strong>Appearance Score:</strong> {report.appearance_score}
-														</p>
-														<p>
 															<strong>Remarks:</strong> {report.app_remarks}
 														</p>
 													</div>
@@ -272,9 +269,6 @@ const EmployeePage: React.FC = () => {
 													<div className="col-md-6">
 														<p>
 															<strong>Equipment Knowledge:</strong> {report.eq_knowledge}
-														</p>
-														<p>
-															<strong>Equipment Score:</strong> {report.eq_score}
 														</p>
 														<p>
 															<strong>Remarks:</strong> {report.eq_remarks}
@@ -330,9 +324,6 @@ const EmployeePage: React.FC = () => {
 													</div>
 													<div className="col-md-6">
 														<p>
-															<strong>Cooking Score:</strong> {report.cooking_score}
-														</p>
-														<p>
 															<strong>Remarks:</strong> {report.cooking_remarks}
 														</p>
 													</div>
@@ -363,9 +354,6 @@ const EmployeePage: React.FC = () => {
 														<p>
 															<strong>Rejected Handling:</strong> {report.rejected_handling}
 														</p>
-														<p>
-															<strong>Final Product Score:</strong> {report.final_product_score}
-														</p>
 													</div>
 												</div>
 											</div>
@@ -394,9 +382,6 @@ const EmployeePage: React.FC = () => {
 														<p>
 															<strong>Instruction Understanding:</strong> {report.instruction_understanding}
 														</p>
-														<p>
-															<strong>Communication Score:</strong> {report.communication_score}
-														</p>
 													</div>
 												</div>
 											</div>
@@ -421,9 +406,6 @@ const EmployeePage: React.FC = () => {
 													<div className="col-md-6">
 														<p>
 															<strong>Assist Initiative:</strong> {report.assist_initiative}
-														</p>
-														<p>
-															<strong>Teamwork Score:</strong> {report.teamwork_score}
 														</p>
 														<p>
 															<strong>Remarks:</strong> {report.teamwork_remarks}
@@ -454,9 +436,6 @@ const EmployeePage: React.FC = () => {
 															<strong>Empathy:</strong> {report.empathy}
 														</p>
 														<p>
-															<strong>Customer Service Score:</strong> {report.customer_service_score}
-														</p>
-														<p>
 															<strong>Remarks:</strong> {report.customer_service_remarks}
 														</p>
 													</div>
@@ -481,9 +460,6 @@ const EmployeePage: React.FC = () => {
 														</p>
 													</div>
 													<div className="col-md-6">
-														<p>
-															<strong>Problem Solving Score:</strong> {report.problem_solving_score}
-														</p>
 														<p>
 															<strong>Remarks:</strong> {report.problem_solving_remarks}
 														</p>
@@ -510,9 +486,6 @@ const EmployeePage: React.FC = () => {
 													</div>
 													<div className="col-md-6">
 														<p>
-															<strong>Industry Knowledge Score:</strong> {report.industry_knowledge_score}
-														</p>
-														<p>
 															<strong>Remarks:</strong> {report.industry_knowledge_remarks}
 														</p>
 													</div>
@@ -537,9 +510,6 @@ const EmployeePage: React.FC = () => {
 														</p>
 													</div>
 													<div className="col-md-6">
-														<p>
-															<strong>Attitude Score:</strong> {report.attitude_score}
-														</p>
 														<p>
 															<strong>Remarks:</strong> {report.attitude_remarks}
 														</p>
@@ -570,9 +540,6 @@ const EmployeePage: React.FC = () => {
 														</p>
 														<p>
 															<strong>Team KPI:</strong> {report.team}
-														</p>
-														<p>
-															<strong>KPI Awareness Score:</strong> {report.kpi_awareness_score}
 														</p>
 														<p>
 															<strong>Remarks:</strong> {report.kpi_awareness_remarks}

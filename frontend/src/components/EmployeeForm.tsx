@@ -50,19 +50,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 		}));
 	};
 
-	const handleAddObservation = (updatedReports: ObservationReport[]) => {
-		setEmployee((prev) => ({
-			...prev,
-			observationReports: updatedReports, // Update the employee state with the finalized reports
-		}));
-	};
-
-	const handleRemoveObservation = (index: number) => {
-		setEmployee((prev) => ({
-			...prev,
-			observationReports: prev.observationReports?.filter((_, i) => i !== index),
-		}));
-	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -172,17 +159,46 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 					</label>
 					<input type="text" id="EN" className="form-control" value={employee.remarks || ""} onChange={(e) => handleInputChange("remarks", e.target.value)} />
 				</div>
-				<div className="col-md-6 mt-4">
-					<label htmlFor="current_employee" className="form-label me-3">
-						Is this a current employee?
-					</label>
-					<input
-						type="checkbox"
-						id="current_employee"
-						className="form-check-input"
-						checked={employee.current_employee || false} // Use `checked` for boolean values
-						onChange={(e) => handleInputChange("current_employee", e.target.checked)}
-					/>
+				<div className="col-md-12 mt-4">
+					<div className="card p-3">
+						<h5 className="card-title">Employee Status</h5>
+						<div className="form-check form-switch">
+							<input
+								type="checkbox"
+								id="terminated"
+								className="form-check-input"
+								checked={employee.terminated || false}
+								onChange={(e) => handleInputChange("terminated", e.target.checked)}
+							/>
+							<label htmlFor="terminated" className="form-check-label">
+								Is this employee terminated?
+							</label>
+						</div>
+						<div className="form-check form-switch mt-2">
+							<input
+								type="checkbox"
+								id="extended_probation"
+								className="form-check-input"
+								checked={employee.extended_probation || false}
+								onChange={(e) => handleInputChange("extended_probation", e.target.checked)}
+							/>
+							<label htmlFor="extended_probation" className="form-check-label">
+								Is this employee on extended probation?
+							</label>
+						</div>
+						<div className="form-check form-switch mt-2">
+							<input
+								type="checkbox"
+								id="passed_probation"
+								className="form-check-input"
+								checked={employee.passed_probation || false}
+								onChange={(e) => handleInputChange("passed_probation", e.target.checked)}
+							/>
+							<label htmlFor="passed_probation" className="form-check-label">
+								Has this employee passed probation?
+							</label>
+						</div>
+					</div>
 				</div>
 
 				{/* Conditional Fields */}
