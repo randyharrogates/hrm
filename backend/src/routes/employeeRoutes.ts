@@ -1,9 +1,14 @@
 /** @format */
 
 import { Router } from "express";
+import multer from "multer";
 import { getAllEmployees, getEmployeeById, createEmployee, updateEmployee, deleteEmployee, getEmployeeObservations, addEmployeeObservation } from "../controllers/employeeController";
+import { uploadObservationReports } from "../controllers/observationReportController";
 
 const router = Router();
+// Multer configuration for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // Employee routes
 router.get("/employees", getAllEmployees);

@@ -33,7 +33,7 @@ export interface ISpecialistTrainee extends IEmployee {
 const ObservationReportSchema: Schema = new Schema({
 	week_start_date: { type: Date, required: true },
 	training_centre: { type: String, required: true },
-	overall_score: { type: Number, required: true },
+	overall_score: { type: Number },
 
 	// Appearance
 	aprons_sop: { type: Number, required: true },
@@ -213,7 +213,7 @@ const EmployeeModel = mongoose.model<IEmployee, IEmployeeModel>("Employee", Base
 const MasterCrewEmployeeModel = EmployeeModel.discriminator<IMasterCrew>(
 	"MasterCrewEmployee",
 	new Schema({
-		master_crew_remarks: { type: String, required: true },
+		master_crew_remarks: { type: String },
 	})
 );
 

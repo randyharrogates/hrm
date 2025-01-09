@@ -10,16 +10,20 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@typegoose/typegoose": "^12.10.1",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "mongoose": "^8.9.2",
-    "react-data-table-component": "^7.6.2"
+    "multer": "^1.4.5-lts.1",
+    "react-data-table-component": "^7.6.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/multer": "^1.4.12",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.7.2"
   }
