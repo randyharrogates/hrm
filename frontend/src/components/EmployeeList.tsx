@@ -2,18 +2,20 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DataTable from "react-data-table-component";
 import api, { deleteEmployee, getEmployeeById } from "../api";
 import { EmployeeTypes } from "../types/Employee";
 
 const EmployeeList: React.FC = () => {
 	const [employees, setEmployees] = useState<EmployeeTypes[]>([]);
-	const [editingEmployee, setEditingEmployee] = useState<EmployeeTypes | null>(null);
+	const [startRange, setStartRange] = useState<string>(""); // Start date range
+	const [endRange, setEndRange] = useState<string>(""); // End date range
 	const [searchQuery, setSearchQuery] = useState<string>("");
-	const [filter, setFilter] = useState<string>("All");
-	const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-	const [sortByGrading, setSortByGrading] = useState<boolean>(false); // New state to track sorting by grading score
+	const [sortColumn, setSortColumn] = useState<keyof EmployeeTypes | null>(null); // Track the current column for sorting
+	const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc"); // Track sort direction
 	const navigate = useNavigate();
 
+	// Fetch employees from the backend
 	useEffect(() => {
 		const fetchEmployees = async () => {
 			const response = await api.get("/");
@@ -22,6 +24,7 @@ const EmployeeList: React.FC = () => {
 		fetchEmployees();
 	}, []);
 
+	// Handle delete operation
 	const handleDelete = async (id: string) => {
 		const confirmDelete = window.confirm("Are you sure you want to delete this employee?");
 		if (confirmDelete) {
@@ -36,52 +39,143 @@ const EmployeeList: React.FC = () => {
 		}
 	};
 
+	// Navigate to the edit page
 	const handleEdit = async (id: string) => {
 		try {
 			const employee = await getEmployeeById(id);
-			console.log("Fetched Employee:", employee); // Debugging
-			setEditingEmployee(employee);
 			navigate("/edit-employee", { state: { employee } });
 		} catch (error) {
 			console.error("Error fetching employee:", error);
 		}
 	};
 
+	// Navigate to the employee detail page
 	const navigateToEmployeePage = (id: string) => {
 		navigate(`/employee/${id}`);
 	};
 
-	const filteredEmployees = employees
-		.filter((employee) => {
-			if (filter !== "All" && employee.employee_type !== filter) return false;
+	// Define columns for DataTable
+	const columns = [
+		{
+			name: "Employee Number (EN)",
+			selector: (row: EmployeeTypes) => (row && row.EN ? row.EN : "N/A") || "N/A",
+			sortable: true,
+			minWidth: "250px",
+		},
+		{
+			name: "Name",
+			selector: (row: EmployeeTypes) => (row && row.name ? row.name : "N/A") || "N/A",
+			sortable: true,
+		},
+		{
+			name: "Contact No.",
+			selector: (row: EmployeeTypes) => (row && row.contact ? row.contact : "N/A") || "N/A",
+			sortable: true,
+			minWidth: "150px",
+		},
+		{
+			name: "Employee Type",
+			selector: (row: EmployeeTypes) => (row && row.employee_type ? row.employee_type : "N/A"),
+			sortable: true,
+			minWidth: "200px",
+		},
+		{
+			name: "Training Outlet",
+			selector: (row: EmployeeTypes) => (row && row.training_outlet ? row.training_outlet : "N/A") || "N/A",
+			sortable: true,
+			minWidth: "200px",
+		},
+		{
+			name: "Outlet",
+			selector: (row: EmployeeTypes) => (row && row.outlet ? row.outlet : "N/A") || "N/A",
+			sortable: true,
+		},
+		{
+			name: "Probation Start Date",
+			selector: (row: EmployeeTypes) => {
+				// Safely parse the date
+				const startDate = row.probation_start_date ? new Date(row.probation_start_date) : null;
+				return startDate && !isNaN(startDate.getTime()) ? startDate.toISOString().split("T")[0] : "N/A";
+			},
+			sortable: true,
+			minWidth: "250px",
+		},
+		{
+			name: "Probation End Date",
+			selector: (row: EmployeeTypes) => {
+				// Safely parse the date
+				const endDate = row.probation_end_date ? new Date(row.probation_end_date) : null;
+				return endDate && !isNaN(endDate.getTime()) ? endDate.toISOString().split("T")[0] : "N/A";
+			},
+			sortable: true,
+			minWidth: "250px",
+		},
 
-			const query = searchQuery.toLowerCase();
-			const probationStartDate = employee.probation_start_date ? new Date(employee.probation_start_date) : null;
-			const probationEndDate = employee.probation_end_date ? new Date(employee.probation_end_date) : null;
+		{
+			name: "Extended Probation",
+			selector: (row: EmployeeTypes) => (row.extended_probation ? "Yes" : "No"),
+			sortable: true,
+			minWidth: "250px",
+		},
+		{
+			name: "Passed Probation",
+			selector: (row: EmployeeTypes) => (row.passed_probation ? "Yes" : "No"),
+			sortable: true,
+			minWidth: "200px",
+		},
+		{
+			name: "Terminated",
+			selector: (row: EmployeeTypes) => (row.terminated ? "Yes" : "No"),
+			sortable: true,
+			minWidth: "150px",
+		},
+		{
+			name: "Grade",
+			selector: (row: EmployeeTypes) => row.overall_grading_score || 0,
+			sortable: true,
+		},
+		{
+			name: "Actions",
+			cell: (row: EmployeeTypes) => (
+				<div>
+					<button className="btn btn-outline-warning btn-sm ms-2" onClick={() => handleEdit(row._id)}>
+						<i className="bi bi-pencil"></i> Edit
+					</button>
+					<button className="btn btn-outline-info btn-sm ms-2" onClick={() => navigateToEmployeePage(row._id)}>
+						<i className="bi bi-eye"></i> View
+					</button>
+					<button className="btn btn-outline-danger btn-sm ms-2 disabled" onClick={() => handleDelete(row._id)}>
+						<i className="bi bi-trash"></i> Delete
+					</button>
+				</div>
+			),
+			ignoreRowClick: true,
+			allowOverflow: true,
+			button: true,
+		},
+	];
 
-			return (
-				employee.EN?.toLowerCase().includes(query) ||
-				employee.name?.toLowerCase().includes(query) ||
-				employee.contact?.toLowerCase().includes(query) ||
-				employee.training_outlet?.toLowerCase().includes(query) ||
-				employee.outlet?.toLowerCase().includes(query) ||
-				(probationStartDate && probationStartDate.toISOString().toLowerCase().includes(query)) ||
-				(probationEndDate && probationEndDate.toISOString().toLowerCase().includes(query)) ||
-				employee.remarks?.toLowerCase().includes(query)
-			);
-		})
-		.sort((a, b) => {
-			if (sortByGrading) {
-				const aScore = a.overall_grading_score || 0;
-				const bScore = b.overall_grading_score || 0;
-				return sortOrder === "asc" ? aScore - bScore : bScore - aScore;
-			}
-			const aValue = a.name || "";
-			const bValue = b.name || "";
-			if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
-			if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
-			return 0;
-		});
+	// Filter employees based on the search query
+	const filteredEmployees = employees.filter((employee) => {
+		const query = searchQuery.toLowerCase();
+		// Search filter
+		const matchesSearch =
+			employee.EN?.toLowerCase().includes(query) ||
+			employee.name?.toLowerCase().includes(query) ||
+			employee.contact?.toLowerCase().includes(query) ||
+			employee.employee_type?.toLowerCase().includes(query) ||
+			(employee.overall_grading_score ? employee.overall_grading_score.toString().includes(query) : false);
+
+		// Date range filter
+		const startDate = employee.probation_start_date ? new Date(employee.probation_start_date) : null;
+		const endDate = employee.probation_end_date ? new Date(employee.probation_end_date) : null;
+		const rangeStart = startRange ? new Date(startRange) : null;
+		const rangeEnd = endRange ? new Date(endRange) : null;
+
+		const matchesDateRange = (!rangeStart || (startDate && startDate >= rangeStart)) && (!rangeEnd || (endDate && endDate <= rangeEnd));
+
+		return matchesSearch && matchesDateRange;
+	});
 
 	return (
 		<div className="container my-4">
@@ -89,78 +183,60 @@ const EmployeeList: React.FC = () => {
 				<i className="bi bi-people-fill"></i> Employee List
 			</h2>
 
-			{/* Search, Filter, Sort Controls */}
+			{/* Search and Date Range Filters */}
 			<div className="row mb-4">
-				<div className="col-md-6">
+				<div className="col-md-4">
 					<label htmlFor="search-bar" className="form-label">
 						Search Employees
 					</label>
-					<input type="text" id="search-bar" className="form-control" placeholder="Search by name, EN, or outlet..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+					<input
+						type="text"
+						id="search-bar"
+						className="form-control"
+						placeholder="Search by name, EN, or grading score..."
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+					/>
 				</div>
-
-				<div className="col-md-3">
-					<label htmlFor="filter-dropdown" className="form-label">
-						Filter by Type
+				<div className="col-md-4">
+					<label htmlFor="start-range" className="form-label">
+						Probation Start Date Range
 					</label>
-					<select id="filter-dropdown" className="form-select" value={filter} onChange={(e) => setFilter(e.target.value)}>
-						<option value="All">All Types</option>
-						<option value="MasterCrew">Master Crew</option>
-						<option value="SeniorCrew">Senior Crew</option>
-						<option value="Intern">Intern</option>
-						<option value="SpecialistTrainee">Specialist Trainee</option>
-					</select>
+					<input type="date" id="start-range" className="form-control" value={startRange} onChange={(e) => setStartRange(e.target.value)} />
 				</div>
-
-				<div className="col-md-3">
-					<label htmlFor="sort-order" className="form-label">
-						Sort Order
+				<div className="col-md-4">
+					<label htmlFor="end-range" className="form-label">
+						Probation End Date Range
 					</label>
-					<select id="sort-order" className="form-select" value={sortOrder} onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}>
-						<option value="asc">Ascending</option>
-						<option value="desc">Descending</option>
-					</select>
+					<input type="date" id="end-range" className="form-control" value={endRange} onChange={(e) => setEndRange(e.target.value)} />
 				</div>
 			</div>
 
-			{/* Button to Sort by Grading Score */}
-			<div className="row mb-4">
-				<div className="col-md-12">
-					<button className="btn btn-outline-primary" onClick={() => setSortByGrading(!sortByGrading)}>
-						{sortByGrading ? "Sort by Name" : "Sort by Grading Score"}
-					</button>
-				</div>
-			</div>
-
-			{/* Employee List */}
-			<div className="list-group">
-				{filteredEmployees.length === 0 ? (
-					<div className="alert alert-warning text-center">
-						<i className="bi bi-exclamation-triangle-fill"></i> No employees found.
-					</div>
-				) : (
-					filteredEmployees.map((employee) => (
-						<div key={employee._id} className="list-group-item d-flex justify-content-between align-items-center">
-							<div>
-								<span className="fw-bold text-primary">EN:</span> {employee.EN} | <span className="fw-bold text-primary">Name:</span> {employee.name} |{" "}
-								<span className="fw-bold text-primary">Contact:</span> {employee.contact} | <span className="fw-bold text-primary">Employee Type:</span> {employee.employee_type} |{" "}
-								<span className="fw-bold text-primary">Outlet:</span> {employee.outlet} | <span className="fw-bold text-primary">Active:</span>{" "}
-								{employee.current_employee ? "Yes" : "No"} | <span className="fw-bold text-primary">Grade:</span> {employee.overall_grading_score}
-							</div>
-							<div>
-								<button className="btn btn-sm btn-outline-warning me-2" onClick={() => handleEdit(employee._id)}>
-									<i className="bi bi-pencil"></i> Edit
-								</button>
-								<button className="btn btn-sm btn-outline-danger me-2" onClick={() => handleDelete(employee._id)}>
-									<i className="bi bi-trash"></i> Delete
-								</button>
-								<button className="btn btn-sm btn-outline-info" onClick={() => navigateToEmployeePage(employee._id)}>
-									<i className="bi bi-eye"></i> View
-								</button>
-							</div>
-						</div>
-					))
-				)}
-			</div>
+			<DataTable
+				columns={columns}
+				data={filteredEmployees}
+				pagination
+				highlightOnHover
+				striped
+				defaultSortFieldId={sortColumn || "name"}
+				defaultSortAsc={sortDirection === "asc"}
+				onSort={(column, direction) => {
+					setSortColumn(column.selector as unknown as keyof EmployeeTypes);
+					setSortDirection(direction);
+				}}
+				customStyles={{
+					headCells: {
+						style: {
+							whiteSpace: "normal", // Allows wrapping of header text if needed
+							overflow: "visible", // Ensures the text doesn't get truncated
+							textOverflow: "clip", // Avoids ellipsis in case of overflow
+							wordWrap: "break-word", // Wraps long text onto the next line
+							fontWeight: "bold", // Makes headers bold for visibility
+							fontSize: "16px", // Adjust header font size as needed
+						},
+					},
+				}}
+			/>
 		</div>
 	);
 };
