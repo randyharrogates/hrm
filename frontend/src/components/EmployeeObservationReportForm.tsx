@@ -236,7 +236,6 @@ const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps
 							<h6 className="mb-3">{section}</h6>
 							<div className="row">
 								{fields.map((field) => {
-									console.log("Processing field:", field.id); // Log the field id here
 									return (
 										<div key={field.id} className="col-md-4 mb-3">
 											<label htmlFor={`${field.id}-${index}`} className="form-label">

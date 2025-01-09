@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import api, { deleteEmployee, getEmployeeById } from "../api";
 import { EmployeeTypes } from "../types/Employee";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const EmployeeList: React.FC = () => {
 	const [employees, setEmployees] = useState<EmployeeTypes[]>([]);
@@ -177,6 +179,18 @@ const EmployeeList: React.FC = () => {
 		return matchesSearch && matchesDateRange;
 	});
 
+	// Export to Excel
+	const exportToExcel = () => {
+		const worksheet = XLSX.utils.json_to_sheet(filteredEmployees);
+		const workbook = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(workbook, worksheet, "Employees");
+		const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+
+		// Save the file
+		const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+		saveAs(data, "EmployeeList.xlsx");
+	};
+
 	return (
 		<div className="container my-4">
 			<h2 className="text-primary mb-4 text-center">
@@ -210,6 +224,13 @@ const EmployeeList: React.FC = () => {
 					</label>
 					<input type="date" id="end-range" className="form-control" value={endRange} onChange={(e) => setEndRange(e.target.value)} />
 				</div>
+			</div>
+
+			{/* Export Button */}
+			<div className="mb-4">
+				<button className="btn btn-success" onClick={exportToExcel}>
+					<i className="bi bi-file-earmark-excel"></i> Export to Excel
+				</button>
 			</div>
 
 			<DataTable
