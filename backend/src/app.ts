@@ -3,8 +3,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import mongoose from "mongoose";
 import employeeRoutes from "./routes/employeeRoutes";
+import observationReportRoutes from "./routes/observationReportRoutes";
 
 const app = express();
 
@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.use("/api", employeeRoutes);
+app.use("/api", observationReportRoutes);
 
 // Error handling middleware for undefined routes
 app.use((req, res, next) => {

@@ -9,5 +9,6 @@
 		"paths": {
 			"@shared/*": ["../shared/types/*"]
 		}
-	}
+	},
+	"include": ["src", "types"]
 }

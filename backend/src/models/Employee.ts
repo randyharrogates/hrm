@@ -33,7 +33,7 @@ export interface ISpecialistTrainee extends IEmployee {
 const ObservationReportSchema: Schema = new Schema({
 	week_start_date: { type: Date, required: true },
 	training_centre: { type: String, required: true },
-	overall_score: { type: Number, required: true },
+	overall_score: { type: Number },
 
 	// Appearance
 	aprons_sop: { type: Number, required: true },
@@ -146,26 +146,37 @@ const BaseEmployeeSchema: Schema = new Schema({
 });
 
 BaseEmployeeSchema.pre("save", async function (next) {
-	// Access the employee document
 	const employee = this as unknown as IEmployee; // Type assertion
 
 	// Check if observationReports is an array
 	if (Array.isArray(employee.observationReports) && employee.observationReports.length > 0) {
-		employee.observationReports = employee.observationReports.map((report) => {
-			// Get all numeric fields except remarks
-			const numericFields = Object.keys(report).filter((field) => {
-				return !field.endsWith("_remarks") && typeof report[field as keyof IObservationReport] === "number";
+		employee.observationReports = employee.observationReports.map((report, index) => {
+			// Convert the Mongoose subdocument to a plain object
+			const plainReport = (report as unknown as mongoose.Document).toJSON();
+
+			// Get the numeric fields from the schema-defined fields
+			const numericFields = Object.keys(plainReport).filter((field) => {
+				// Exclude remarks fields and non-numeric fields
+				return !field.endsWith("_remarks") && typeof plainReport[field] === "number" && !field.endsWith("overall_score");
 			});
 
-			// Calculate average score
 			const total = numericFields.reduce((sum, field) => {
-				return sum + (report[field as keyof IObservationReport] as number);
+				return sum + (plainReport[field] as number);
 			}, 0);
+
 			const average = total / numericFields.length;
 
-			// Update the overall_score for the report
-			report.overall_score = parseFloat(average.toFixed(2));
+			console.log(`Report ${index + 1}:`);
+			console.log(`Numeric Fields:`, numericFields);
+			console.log(
+				`Values:`,
+				numericFields.map((field) => plainReport[field])
+			);
+			console.log(`Total:`, total);
+			console.log(`Average:`, average);
 
+			// Update the overall_score in the original report object
+			report.overall_score = parseFloat(average.toFixed(2));
 			return report;
 		});
 	}
@@ -176,13 +187,15 @@ BaseEmployeeSchema.pre("save", async function (next) {
 			return sum + report.overall_score;
 		}, 0);
 
-		employee.overall_grading_score = parseFloat((totalScore / employee.observationReports.length).toFixed(2));
+		employee.overall_grading_score = Math.round((totalScore / employee.observationReports.length) * 100) / 100;
 	} else {
-		employee.overall_grading_score = 0; // Set to 0 if no observation reports exist
+		employee.overall_grading_score = 0;
 	}
 
 	next();
 });
+
+
 
 
 
@@ -213,7 +226,7 @@ const EmployeeModel = mongoose.model<IEmployee, IEmployeeModel>("Employee", Base
 const MasterCrewEmployeeModel = EmployeeModel.discriminator<IMasterCrew>(
 	"MasterCrewEmployee",
 	new Schema({
-		master_crew_remarks: { type: String, required: true },
+		master_crew_remarks: { type: String },
 	})
 );
 

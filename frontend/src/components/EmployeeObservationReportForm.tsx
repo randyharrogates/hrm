@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import { ObservationReport } from "../types/Employee";
 
-interface EmployeeObservationReportFormProps {
+export interface EmployeeObservationReportFormProps {
 	observationReports: ObservationReport[]; // Array of observation reports
 	setObservationReports: React.Dispatch<React.SetStateAction<ObservationReport[]>>; // Callback to update observationReports
 }
@@ -256,12 +256,27 @@ const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps
 															: report[field.id as keyof ObservationReport]?.toString() || ""
 													}
 													onChange={(e) => {
-														const value =
-															field.type === "number"
-																? Math.min(Math.max(Number(e.target.value), field.min || 0), field.max || Infinity)
-																: field.type === "date"
-																? new Date(e.target.value)
-																: e.target.value;
+														const inputValue = e.target.value;
+
+														let value: any;
+
+														if (field.type === "number") {
+															if (inputValue === "") {
+																// Allow empty input to support intermediate states
+																value = "";
+															} else {
+																const numericValue = Number(inputValue);
+																// Clamp value to min/max, if applicable
+																value = isNaN(numericValue) ? "" : Math.min(Math.max(numericValue, field.min || 0), field.max || Infinity);
+															}
+														} else if (field.type === "date") {
+															// Convert date string to Date object
+															value = new Date(inputValue);
+														} else {
+															// For all other types, set the raw value
+															value = inputValue;
+														}
+
 														handleInputChange(index, field.id as keyof ObservationReport, value);
 													}}
 													{...(field.min !== undefined && { min: field.min })}

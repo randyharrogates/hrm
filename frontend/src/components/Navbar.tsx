@@ -30,6 +30,11 @@ const Navbar: React.FC = () => {
 								Employee List
 							</Link>
 						</li>
+						<li className="nav-item">
+							<Link className="nav-link" to="/upload-observation-report">
+								Upload Observation Reports
+							</Link>
+						</li>
 					</ul>
 				</div>
 			</div>

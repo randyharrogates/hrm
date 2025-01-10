@@ -1,7 +1,9 @@
 /** @format */
 
 import { Router } from "express";
+import multer from "multer";
 import { getAllEmployees, getEmployeeById, createEmployee, updateEmployee, deleteEmployee, getEmployeeObservations, addEmployeeObservation } from "../controllers/employeeController";
+
 
 const router = Router();
 
@@ -15,5 +17,6 @@ router.delete("/employees/:id", deleteEmployee);
 // Observation report routes
 router.get("/employees/:id/observations", getEmployeeObservations);
 router.post("/employees/:id/observations", addEmployeeObservation);
+
 
 export default router;
