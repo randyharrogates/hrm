@@ -13,11 +13,11 @@ A simple Human Resource Management (HRM) system built with:
 - Delete employees
 
 ## Project Structure
-### Backend (`hrm-backend`)
+### Backend (`backend`)
 - Handles API requests and CRUD operations for employee data.
 - Uses MongoDB as the database.
 
-### Frontend (`hrm-frontend`)
+### Frontend (`frontend`)
 - Provides a user-friendly interface for interacting with the HRM system.
 
 ---
