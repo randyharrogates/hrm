@@ -11,6 +11,8 @@ A simple Human Resource Management (HRM) system built with:
 - Search for employees by ID
 - Edit employee details
 - Delete employees
+- Upload employee observation report in excel format
+- Export employee details into excel
 
 ## Project Structure
 ### Backend (`backend`)
