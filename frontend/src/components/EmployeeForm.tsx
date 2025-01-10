@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import api from "../api";
 import { useNavigate, useLocation } from "react-router-dom";
-import { EmployeeTypes, IMasterCrew, ISeniorCrew, IIntern, ISpecialistTrainee, ObservationReport } from "../types/Employee";
+import { EmployeeTypes, IMasterCrew, ISeniorCrew, IIntern, ISpecialistTrainee } from "../types/Employee";
 import EmployeeObservationReportForm from "./EmployeeObservationReportForm";
 import { initializeObservationReport } from "./EmployeeObservationReportForm";
 

@@ -207,7 +207,7 @@ const EmployeeList: React.FC = () => {
 						type="text"
 						id="search-bar"
 						className="form-control"
-						placeholder="Search by name, EN, or grading score..."
+						placeholder="Search by Name, EN, Emp Type, or Grade..."
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
