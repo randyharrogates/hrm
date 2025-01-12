@@ -1,12 +1,13 @@
 /** @format */
 
 import { Request, Response } from "express";
-import { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, InternModel, SpecialistTraineeModel, ObservationReportSchema } from "../models/Employee";
+import { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, InternModel, SpecialistTraineeModel, LocalCrewModel, ForeignCrewModel } from "../models/Employee";
 
 // Get all employees
 export const getAllEmployees = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const employees = await EmployeeModel.find();
+		console.log("Number of Employees fetched:", employees.length);
 		res.status(200).json(employees);
 	} catch (error) {
 		res.status(500).json({ message: "Error fetching employees", error });
@@ -49,6 +50,12 @@ export const createEmployee = async (req: Request, res: Response): Promise<void>
 			case "SpecialistTrainee":
 				EmployeeModelToUse = SpecialistTraineeModel;
 				break;
+			case "LocalCrew":
+				EmployeeModelToUse = LocalCrewModel;
+				break;
+			case "ForeignCrew":
+				EmployeeModelToUse = ForeignCrewModel;
+				break;
 			default:
 				EmployeeModelToUse = EmployeeModel;
 		}
@@ -79,7 +86,14 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
 		const { employee_type, ...updateData } = req.body;
 
 		// Select the appropriate model based on the employee_type
-		let EmployeeModelToUse: typeof EmployeeModel | typeof MasterCrewEmployeeModel | typeof SeniorCrewEmployeeModel | typeof InternModel | typeof SpecialistTraineeModel;
+		let EmployeeModelToUse:
+			| typeof EmployeeModel
+			| typeof MasterCrewEmployeeModel
+			| typeof SeniorCrewEmployeeModel
+			| typeof InternModel
+			| typeof SpecialistTraineeModel
+			| typeof LocalCrewModel
+			| typeof ForeignCrewModel;
 
 		switch (employee_type) {
 			case "MasterCrewEmployee":
@@ -91,8 +105,14 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
 			case "Intern":
 				EmployeeModelToUse = InternModel;
 				break;
-			case "Contractor":
+			case "SpecialistTrainee":
 				EmployeeModelToUse = SpecialistTraineeModel;
+				break;
+			case "LocalCrew":
+				EmployeeModelToUse = LocalCrewModel;
+				break;
+			case "ForeignCrew":
+				EmployeeModelToUse = ForeignCrewModel;
 				break;
 			default:
 				EmployeeModelToUse = EmployeeModel;

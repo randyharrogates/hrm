@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api";
 import { IEmployee, IObservationReport } from "@shared/types/employee";
-import { IMasterCrew, ISeniorCrew, IIntern, ISpecialistTrainee } from "../types/Employee";
+import { IMasterCrew, ISeniorCrew, IIntern, ISpecialistTrainee, ILocalCrew, IForeignCrew } from "../types/Employee";
 
 const EmployeePage: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
@@ -20,6 +20,10 @@ const EmployeePage: React.FC = () => {
 	const isIntern = (employee: IEmployee): employee is IIntern => employee.employee_type === "Intern";
 
 	const isSpecialistTrainee = (employee: IEmployee): employee is ISpecialistTrainee => employee.employee_type === "SpecialistTrainee";
+
+	const isLocalCrew = (employee: IEmployee): employee is ILocalCrew => employee.employee_type === "LocalCrew";
+
+	const isForeignCrew = (employee: IEmployee): employee is IForeignCrew => employee.employee_type === "ForeignCrew";
 
 	useEffect(() => {
 		const fetchEmployee = async () => {
@@ -129,6 +133,47 @@ const EmployeePage: React.FC = () => {
 			);
 		}
 
+		if (isLocalCrew(employee)) {
+			return (
+				<>
+					<p>
+						<strong>Training Form:</strong> {employee.training_form}
+					</p>
+					<p>
+						<strong>14-Hour Shift:</strong> {employee.forteen_hours_shift ? new Date(employee.forteen_hours_shift).toLocaleDateString() : "N/A"}
+					</p>
+					<p>
+						<strong>Verbal and Practical:</strong> {employee.verbal_and_practical ? new Date(employee.verbal_and_practical).toLocaleDateString() : "N/A"}
+					</p>
+					<p>
+						<strong>Local Crew Remarks:</strong> {employee.local_crew_remarks}
+					</p>
+				</>
+			);
+		}
+
+		if (isForeignCrew(employee)) {
+			return (
+				<>
+					<p>
+						<strong>Training Form:</strong> {employee.training_form}
+					</p>
+					<p>
+						<strong>14-Hour Shift:</strong> {employee.forteen_hours_shift ? new Date(employee.forteen_hours_shift).toLocaleDateString() : "N/A"}
+					</p>
+					<p>
+						<strong>Verbal and Practical:</strong> {employee.verbal_and_practical ? new Date(employee.verbal_and_practical).toLocaleDateString() : "N/A"}
+					</p>
+					<p>
+						<strong>Foreign Crew Remarks:</strong> {employee.foreign_crew_remarks}
+					</p>
+					<p>
+						<strong>Employee Pass Type:</strong> {employee.pass_type}
+					</p>
+				</>
+			);
+		}
+
 		return <p className="text-muted">No additional fields available for this employee type.</p>;
 	};
 
@@ -151,7 +196,7 @@ const EmployeePage: React.FC = () => {
 						<strong>Contact:</strong> {employee.contact}
 					</p>
 					<p>
-						<strong>Type:</strong> {employee.employee_type}
+						<strong>Employee Type:</strong> {employee.employee_type}
 					</p>
 					<p>
 						<strong>Training Outlet:</strong> {employee.training_outlet}
@@ -170,6 +215,12 @@ const EmployeePage: React.FC = () => {
 					</p>
 					<p>
 						<strong>Terminated?:</strong> {employee.terminated ? "Yes" : "No"}
+					</p>
+					<p>
+						<strong>Passed probation?:</strong> {employee.passed_probation ? "Yes" : "No"}
+					</p>
+					<p>
+						<strong>Extended probation?:</strong> {employee.extended_probation ? "Yes" : "No"}
 					</p>
 					<p>
 						<strong>Overall Grading Score:</strong> {employee.overall_grading_score || 0}

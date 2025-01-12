@@ -32,8 +32,23 @@ export interface ISpecialistTrainee extends IEmployee {
 	verbal_and_practical: Date;
 }
 
+export interface ILocalCrew extends IEmployee {
+	local_crew_remarks: string;
+	training_form: string;
+	forteen_hours_shift: Date;
+	verbal_and_practical: Date;
+}
+
+export interface IForeignCrew extends IEmployee {
+	foreign_crew_remarks: string;
+	training_form: string;
+	forteen_hours_shift: Date;
+	verbal_and_practical: Date;
+	pass_type: string;
+}
+
 // A union type to represent all possible employee types
-export type EmployeeTypes = IMasterCrew | ISeniorCrew | IIntern | ISpecialistTrainee;
+export type EmployeeTypes = IMasterCrew | ISeniorCrew | IIntern | ISpecialistTrainee | ILocalCrew | IForeignCrew;
 
 // Re-export ObservationReport for reuse in the frontend
 export type ObservationReport = IObservationReport;

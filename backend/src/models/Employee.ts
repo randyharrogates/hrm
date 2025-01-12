@@ -30,6 +30,21 @@ export interface ISpecialistTrainee extends IEmployee {
 	specialist_trainee_remarks: string;
 }
 
+export interface ILocalCrew extends IEmployee {
+	training_form: string;
+	forteen_hours_shift: Date;
+	verbal_and_practical: Date;
+	local_crew_remarks: string;
+}
+
+export interface IForeignCrew extends IEmployee {
+	training_form: string;
+	forteen_hours_shift: Date;
+	verbal_and_practical: Date;
+	pass_type: string;
+	foreign_crew_remarks: string;
+}
+
 const ObservationReportSchema: Schema = new Schema({
 	week_start_date: { type: Date, required: true },
 	training_centre: { type: String, required: true },
@@ -262,4 +277,25 @@ const SpecialistTraineeModel = EmployeeModel.discriminator<ISpecialistTrainee>(
 	})
 );
 
-export { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, SpecialistTraineeModel, InternModel, ObservationReportSchema };
+const LocalCrewModel = EmployeeModel.discriminator<ILocalCrew>(
+	"LocalCrew",
+	new Schema({
+		training_form: { type: String },
+		forteen_hours_shift: { type: Date },
+		verbal_and_practical: { type: Date },
+		local_crew_remarks: { type: String },
+	})
+);
+
+const ForeignCrewModel = EmployeeModel.discriminator<IForeignCrew>(
+	"ForeignCrew",
+	new Schema({
+		training_form: { type: String },
+		forteen_hours_shift: { type: Date },
+		verbal_and_practical: { type: Date },
+		pass_type: { type: String },
+		foreign_crew_remarks: { type: String },
+	})
+);
+
+export { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, SpecialistTraineeModel, InternModel, LocalCrewModel, ForeignCrewModel, ObservationReportSchema };
