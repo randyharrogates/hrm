@@ -21,6 +21,7 @@ const EmployeeList: React.FC = () => {
 	useEffect(() => {
 		const fetchEmployees = async () => {
 			const response = await api.get("/");
+			console.log("Fetched employees:", response.data);
 			setEmployees(response.data);
 		};
 		fetchEmployees();
@@ -115,25 +116,25 @@ const EmployeeList: React.FC = () => {
 
 		{
 			name: "Extended Probation",
-			selector: (row: EmployeeTypes) => (row.extended_probation ? "Yes" : "No"),
+			selector: (row: EmployeeTypes) => (row && row.extended_probation ? "Yes" : "No"),
 			sortable: true,
 			minWidth: "250px",
 		},
 		{
 			name: "Passed Probation",
-			selector: (row: EmployeeTypes) => (row.passed_probation ? "Yes" : "No"),
+			selector: (row: EmployeeTypes) => (row && row.passed_probation ? "Yes" : "No"),
 			sortable: true,
 			minWidth: "200px",
 		},
 		{
 			name: "Terminated",
-			selector: (row: EmployeeTypes) => (row.terminated ? "Yes" : "No"),
+			selector: (row: EmployeeTypes) => (row && row.terminated === true ? "Yes" : row.terminated === false ? "No" : "N/A"),
 			sortable: true,
 			minWidth: "150px",
 		},
 		{
 			name: "Grade",
-			selector: (row: EmployeeTypes) => row.overall_grading_score || 0,
+			selector: (row: EmployeeTypes) => (row && row.overall_grading_score ? row.overall_grading_score : 0 || 0),
 			sortable: true,
 		},
 		{
