@@ -35,6 +35,11 @@ const Navbar: React.FC = () => {
 								Upload Observation Reports
 							</Link>
 						</li>
+						<li className="nav-item">
+							<Link className="nav-link" to="/employeeSummary">
+								Employee Summary
+							</Link>
+						</li>
 					</ul>
 				</div>
 			</div>

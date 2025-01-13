@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import EmployeePage from "./pages/EmployeePage";
 import EmployeeForm from "./components/EmployeeForm";
 import EmployeeList from "./components/EmployeeList";
+import EmployeeSummary from "./components/EmployeeSummary";
 import Navbar from "./components/Navbar";
 import api from "./api";
 import { EmployeeTypes } from "./types/Employee";
@@ -42,6 +43,7 @@ const App: React.FC = () => {
 					path="/upload-observation-report"
 					element={<UploadObservationReports />} // Use the correct component
 				/>
+				<Route path="/employeeSummary" element={<EmployeeSummary />} />
 			</Routes>
 		</Router>
 	);
