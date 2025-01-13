@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import api from "../api";
 import { useNavigate, useLocation } from "react-router-dom";
-import { EmployeeTypes, IMasterCrew, ISeniorCrew, IIntern, ISpecialistTrainee } from "../types/Employee";
+import { EmployeeTypes, IMasterCrew, ISeniorCrew, IIntern, ISpecialistTrainee, ILocalCrew, IForeignCrew, IDirectIntake } from "../types/Employee";
 import EmployeeObservationReportForm from "./EmployeeObservationReportForm";
 import { initializeObservationReport } from "./EmployeeObservationReportForm";
 
@@ -35,13 +35,16 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 			  }
 	);
 	const navigate = useNavigate();
-    console.log("Employee Data returned:", employee);
+	console.log("Employee Data returned:", employee);
 
 	// Type guards
 	const isMasterCrew = (emp: Partial<EmployeeTypes>): emp is IMasterCrew => emp.employee_type === "MasterCrew";
 	const isSeniorCrew = (emp: Partial<EmployeeTypes>): emp is ISeniorCrew => emp.employee_type === "SeniorCrew";
 	const isIntern = (emp: Partial<EmployeeTypes>): emp is IIntern => emp.employee_type === "Intern";
 	const isSpecialistTrainee = (emp: Partial<EmployeeTypes>): emp is ISpecialistTrainee => emp.employee_type === "SpecialistTrainee";
+	const isLocalCrew = (emp: Partial<EmployeeTypes>): emp is ILocalCrew => emp.employee_type === "LocalCrew";
+	const isForeignCrew = (emp: Partial<EmployeeTypes>): emp is IForeignCrew => emp.employee_type === "ForeignCrew";
+	const isDirectIntake = (emp: Partial<EmployeeTypes>): emp is IDirectIntake => emp.employee_type === "DirectIntake";
 
 	const handleInputChange = (field: string, value: any) => {
 		setEmployee((prev) => ({
@@ -49,7 +52,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 			[field]: value,
 		}));
 	};
-
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -114,19 +116,29 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 						<option value="SeniorCrew">Senior Crew</option>
 						<option value="Intern">Intern</option>
 						<option value="SpecialistTrainee">Specialist Trainee</option>
+						<option value="LocalCrew">Local Crew</option>
+						<option value="ForeignCrew">Foreign Crew</option>
+						<option value="DirectIntake">Direct Intake</option>
 					</select>
 				</div>
 				<div className="col-md-6">
-					<label htmlFor="EN" className="form-label">
+					<label htmlFor="training_outlet" className="form-label">
 						Training Outlet
 					</label>
-					<input type="text" id="EN" className="form-control" value={employee.training_outlet || ""} onChange={(e) => handleInputChange("training_outlet", e.target.value)} required />
+					<input
+						type="text"
+						id="training_outlet"
+						className="form-control"
+						value={employee.training_outlet || ""}
+						onChange={(e) => handleInputChange("training_outlet", e.target.value)}
+						required
+					/>
 				</div>
 				<div className="col-md-6">
-					<label htmlFor="EN" className="form-label">
+					<label htmlFor="outlet" className="form-label">
 						Outlet
 					</label>
-					<input type="text" id="EN" className="form-control" value={employee.outlet || ""} onChange={(e) => handleInputChange("outlet", e.target.value)} required />
+					<input type="text" id="outlet" className="form-control" value={employee.outlet || ""} onChange={(e) => handleInputChange("outlet", e.target.value)} required />
 				</div>
 				<div className="col-md-6">
 					<label htmlFor="probation_start_date" className="form-label">
@@ -153,11 +165,69 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 						onChange={(e) => handleInputChange("probation_end_date", new Date(e.target.value))}
 					/>
 				</div>
+				{/* Pass Type */}
 				<div className="col-md-6">
-					<label htmlFor="EN" className="form-label">
+					<label htmlFor="pass_type" className="form-label mt-4">
+						Employee Pass Type
+					</label>
+					<input type="text" id="pass_type" className="form-control" value={employee.pass_type || ""} onChange={(e) => handleInputChange("pass_type", e.target.value)} />
+				</div>
+				{/* Training Form */}
+				<div className="col-md-6">
+					<label htmlFor="training_form" className="form-label">
+						Training Form
+					</label>
+					<input type="text" id="training_form" className="form-control" value={employee.training_form || ""} onChange={(e) => handleInputChange("training_form", e.target.value)} />
+				</div>
+
+				{/* Fourteen Hours Shift */}
+				<div className="col-md-6">
+					<label htmlFor="forteen_hours_shift" className="form-label">
+						Forteen Hours Shift
+					</label>
+					<input
+						type="date"
+						id="forteen_hours_shift"
+						className="form-control"
+						value={employee.forteen_hours_shift ? new Date(employee.forteen_hours_shift).toISOString().split("T")[0] : ""}
+						onChange={(e) => handleInputChange("forteen_hours_shift", new Date(e.target.value))}
+					/>
+				</div>
+
+				{/* Verbal and Practical */}
+				<div className="col-md-6">
+					<label htmlFor="verbal_and_practical" className="form-label">
+						Verbal and Practical
+					</label>
+					<input
+						type="date"
+						id="verbal_and_practical"
+						className="form-control"
+						value={employee.verbal_and_practical ? new Date(employee.verbal_and_practical).toISOString().split("T")[0] : ""}
+						onChange={(e) => handleInputChange("verbal_and_practical", new Date(e.target.value))}
+					/>
+				</div>
+				{/* Certificate */}
+				<div className="col-md-6">
+					<label htmlFor="certificate" className="form-label">
+						Certificate
+					</label>
+					<input type="text" id="certificate" className="form-control" value={employee.certificate || ""} onChange={(e) => handleInputChange("certificate", e.target.value)} />
+				</div>
+
+				{/* Hourly Rate */}
+				<div className="col-md-6">
+					<label htmlFor="hourly_rate" className="form-label">
+						Hourly Rate
+					</label>
+					<input type="number" id="hourly_rate" className="form-control" value={employee.hourly_rate || ""} onChange={(e) => handleInputChange("hourly_rate", +e.target.value)} />
+				</div>
+
+				<div className="col-md-6">
+					<label htmlFor="remarks" className="form-label">
 						Remarks
 					</label>
-					<input type="text" id="EN" className="form-control" value={employee.remarks || ""} onChange={(e) => handleInputChange("remarks", e.target.value)} />
+					<input type="text" id="remarks" className="form-control" value={employee.remarks || ""} onChange={(e) => handleInputChange("remarks", e.target.value)} />
 				</div>
 				<div className="col-md-12 mt-4">
 					<div className="card p-3">
@@ -232,70 +302,20 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 								onChange={(e) => handleInputChange("senior_crew_remarks", e.target.value)}
 							/>
 						</div>
-
-						{/* Training Form */}
+					</div>
+				)}
+				{isDirectIntake(employee) && (
+					<div className="row justify-content-center mt-4">
 						<div className="col-md-6">
-							<label htmlFor="training_form" className="form-label mt-4">
-								Training Form
-							</label>
-							<input type="text" id="training_form" className="form-control" value={employee.training_form || ""} onChange={(e) => handleInputChange("training_form", e.target.value)} />
-						</div>
-
-						{/* Fourteen Hours Shift */}
-						<div className="col-md-6">
-							<label htmlFor="forteen_hours_shift" className="form-label mt-4">
-								Forteen Hours Shift
+							<label htmlFor="direct_intake_remarks" className="form-label mt-4">
+								Direct Intake Remarks
 							</label>
 							<input
-								type="date"
-								id="forteen_hours_shift"
+								type="text"
+								id="direct_intake_remarks"
 								className="form-control"
-								value={employee.forteen_hours_shift ? new Date(employee.forteen_hours_shift).toISOString().split("T")[0] : ""}
-								onChange={(e) => handleInputChange("forteen_hours_shift", new Date(e.target.value))}
-							/>
-						</div>
-
-						{/* Verbal and Practical */}
-						<div className="col-md-6">
-							<label htmlFor="verbal_and_practical" className="form-label mt-4">
-								Verbal and Practical
-							</label>
-							<input
-								type="date"
-								id="verbal_and_practical"
-								className="form-control"
-								value={employee.verbal_and_practical ? new Date(employee.verbal_and_practical).toISOString().split("T")[0] : ""}
-								onChange={(e) => handleInputChange("verbal_and_practical", new Date(e.target.value))}
-							/>
-						</div>
-
-						{/* Certificate */}
-						<div className="col-md-6">
-							<label htmlFor="certificate" className="form-label mt-4">
-								Certificate
-							</label>
-							<input type="text" id="certificate" className="form-control" value={employee.certificate || ""} onChange={(e) => handleInputChange("certificate", e.target.value)} />
-						</div>
-
-						{/* Hourly Rate */}
-						<div className="col-md-6">
-							<label htmlFor="hourly_rate" className="form-label mt-4">
-								Hourly Rate
-							</label>
-							<input type="number" id="hourly_rate" className="form-control" value={employee.hourly_rate || ""} onChange={(e) => handleInputChange("hourly_rate", +e.target.value)} />
-						</div>
-
-						{/* Contract End Date */}
-						<div className="col-md-6">
-							<label htmlFor="contract_end_date" className="form-label mt-4">
-								Contract End Date
-							</label>
-							<input
-								type="date"
-								id="contract_end_date"
-								className="form-control"
-								value={employee.contract_end_date ? new Date(employee.contract_end_date).toISOString().split("T")[0] : ""}
-								onChange={(e) => handleInputChange("contract_end_date", new Date(e.target.value))}
+								value={employee.direct_intake_remarks || ""}
+								onChange={(e) => handleInputChange("direct_intake_remarks", e.target.value)}
 							/>
 						</div>
 					</div>
@@ -388,46 +408,44 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 									onChange={(e) => handleInputChange("specialist_trainee_remarks", e.target.value)}
 								/>
 							</div>
+						</div>
+					</div>
+				)}
 
-							{/* Training Form */}
+				{isLocalCrew(employee) && (
+					<div>
+						{/* Local Crew Remarks */}
+						<div className="row justify-content-center mt-4">
 							<div className="col-md-6">
-								<label htmlFor="training_form" className="form-label mt-4">
-									Training Form
+								<label htmlFor="local_crew_remarks" className="form-label mt-4">
+									Local Crew Remarks
 								</label>
 								<input
 									type="text"
-									id="training_form"
+									id="local_crew_remarks"
 									className="form-control"
-									value={employee.training_form || ""}
-									onChange={(e) => handleInputChange("training_form", e.target.value)}
+									value={employee.local_crew_remarks || ""}
+									onChange={(e) => handleInputChange("local_crew_remarks", e.target.value)}
 								/>
 							</div>
+						</div>
+					</div>
+				)}
 
-							{/* Fourteen Hours Shift */}
+				{isForeignCrew(employee) && (
+					<div>
+						{/* Local Crew Remarks */}
+						<div className="row justify-content-center mt-4">
 							<div className="col-md-6">
-								<label htmlFor="forteen_hours_shift" className="form-label mt-4">
-									Fourteen Hours Shift
+								<label htmlFor="foreign_crew_remarks" className="form-label mt-4">
+									Foreign Crew Remarks
 								</label>
 								<input
-									type="date"
-									id="forteen_hours_shift"
+									type="text"
+									id="foreign_crew_remarks"
 									className="form-control"
-									value={employee.forteen_hours_shift instanceof Date ? employee.forteen_hours_shift.toISOString().split("T")[0] : ""}
-									onChange={(e) => handleInputChange("forteen_hours_shift", new Date(e.target.value))}
-								/>
-							</div>
-
-							{/* Verbal and Practical */}
-							<div className="col-md-6">
-								<label htmlFor="verbal_and_practical" className="form-label mt-4">
-									Verbal and Practical
-								</label>
-								<input
-									type="date"
-									id="verbal_and_practical"
-									className="form-control"
-									value={employee.verbal_and_practical instanceof Date ? employee.verbal_and_practical.toISOString().split("T")[0] : ""}
-									onChange={(e) => handleInputChange("verbal_and_practical", new Date(e.target.value))}
+									value={employee.foreign_crew_remarks || ""}
+									onChange={(e) => handleInputChange("foreign_crew_remarks", e.target.value)}
 								/>
 							</div>
 						</div>

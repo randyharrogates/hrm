@@ -9,12 +9,6 @@ export interface IMasterCrew extends IEmployee {
 
 export interface ISeniorCrew extends IEmployee {
 	senior_crew_remarks: string;
-	training_form: string;
-	forteen_hours_shift: Date;
-	verbal_and_practical: Date;
-	certificate: string;
-	hourly_rate: number; // Synced with backend
-	contract_end_date: Date; // Synced with backend
 }
 
 export interface IIntern extends IEmployee {
@@ -27,13 +21,22 @@ export interface IIntern extends IEmployee {
 
 export interface ISpecialistTrainee extends IEmployee {
 	specialist_trainee_remarks: string;
-	training_form: string;
-	forteen_hours_shift: Date;
-	verbal_and_practical: Date;
+}
+
+export interface ILocalCrew extends IEmployee {
+	local_crew_remarks: string;
+}
+
+export interface IForeignCrew extends IEmployee {
+	foreign_crew_remarks: string;
+}
+
+export interface IDirectIntake extends IEmployee {
+	direct_intake_remarks: string;
 }
 
 // A union type to represent all possible employee types
-export type EmployeeTypes = IMasterCrew | ISeniorCrew | IIntern | ISpecialistTrainee;
+export type EmployeeTypes = IMasterCrew | ISeniorCrew | IIntern | ISpecialistTrainee | ILocalCrew | IForeignCrew | IDirectIntake;
 
 // Re-export ObservationReport for reuse in the frontend
 export type ObservationReport = IObservationReport;
