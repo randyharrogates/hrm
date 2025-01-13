@@ -201,10 +201,10 @@ const EmployeePage: React.FC = () => {
 						<strong>Hourly Rate:</strong> {employee.hourly_rate ? employee.hourly_rate : "N/A"}
 					</p>
 					<p>
-						<strong>Terminated?:</strong> {employee.terminated ? "Yes" : "No"}
+						<strong>Employee Status:</strong> {employee.status ? employee.status : "N/A"}
 					</p>
 					<p>
-						<strong>Passed probation?:</strong> {employee.passed_probation ? "Yes" : "No"}
+						<strong>Transit Date:</strong> {employee.transit_date ? new Date(employee.transit_date).toLocaleDateString() : "N/A"}
 					</p>
 					<p>
 						<strong>Extended probation?:</strong> {employee.extended_probation ? "Yes" : "No"}

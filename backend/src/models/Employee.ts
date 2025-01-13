@@ -143,8 +143,8 @@ const BaseEmployeeSchema: Schema = new Schema({
 	probation_start_date: { type: Date },
 	probation_end_date: { type: Date },
 	extended_probation: { type: Boolean, default: false },
-	passed_probation: { type: Boolean, default: false },
-	terminated: { type: Boolean, default: false },
+	status: { type: String, required: true },
+	transit_date: { type: Date },
 	remarks: { type: String },
 	training_form: { type: String },
 	forteen_hours_shift: { type: Date },
@@ -266,14 +266,12 @@ const LocalCrewModel = EmployeeModel.discriminator<ILocalCrew>(
 	"LocalCrew",
 	new Schema({
 		local_crew_remarks: { type: String },
-		pass_type: { type: String },
 	})
 );
 
 const ForeignCrewModel = EmployeeModel.discriminator<IForeignCrew>(
 	"ForeignCrew",
 	new Schema({
-		pass_type: { type: String },
 		foreign_crew_remarks: { type: String },
 	})
 );
@@ -281,7 +279,6 @@ const ForeignCrewModel = EmployeeModel.discriminator<IForeignCrew>(
 const DirectIntakeModel = EmployeeModel.discriminator<IDirectIntake>(
 	"DirectIntake",
 	new Schema({
-		pass_type: { type: String },
 		direct_intake_remarks: { type: String },
 	})
 );

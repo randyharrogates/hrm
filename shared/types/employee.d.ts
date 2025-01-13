@@ -107,8 +107,8 @@ export interface IEmployee {
 	probation_start_date: Date;
 	probation_end_date: Date;
 	extended_probation: boolean;
-	passed_probation: boolean;
-	terminated: boolean;
+	status: string;
+	transit_date: Date;
 	remarks: string;
 	training_form: string;
 	forteen_hours_shift: Date;
