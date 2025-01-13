@@ -121,16 +121,20 @@ const EmployeeList: React.FC = () => {
 			minWidth: "250px",
 		},
 		{
-			name: "Passed Probation",
-			selector: (row: EmployeeTypes) => (row && row.passed_probation ? "Yes" : "No"),
+			name: "Employee Status",
+			selector: (row: EmployeeTypes) => (row && row.status ? row.status : "N/A"),
 			sortable: true,
 			minWidth: "200px",
 		},
 		{
-			name: "Terminated",
-			selector: (row: EmployeeTypes) => (row && row.terminated === true ? "Yes" : row.terminated === false ? "No" : "N/A"),
+			name: "Transit Date",
+			selector: (row: EmployeeTypes) => {
+				// Safely parse the date
+				const endDate = row.transit_date ? new Date(row.transit_date) : null;
+				return endDate && !isNaN(endDate.getTime()) ? endDate.toISOString().split("T")[0] : "N/A";
+			},
 			sortable: true,
-			minWidth: "150px",
+			minWidth: "250px",
 		},
 		{
 			name: "Grade",

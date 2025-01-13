@@ -30,6 +30,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 			  }
 			: {
 					employee_type: "Intern",
+					status: "InProgress", // Default status
+					transit_date: "", // Default transit date
 					current_employee: true,
 					observationReports: [initializeObservationReport()], // Start with one empty observation report
 			  }
@@ -47,6 +49,24 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 	const isDirectIntake = (emp: Partial<EmployeeTypes>): emp is IDirectIntake => emp.employee_type === "DirectIntake";
 
 	const handleInputChange = (field: string, value: any) => {
+		setEmployee((prev) => ({
+			...prev,
+			[field]: value,
+		}));
+	};
+
+	// Handle status change
+	const handleStatusChange = (field: string, value: string) => {
+		setEmployee((prev) => ({
+			...prev,
+			status: value,
+			// Reset transit_date if the status is "InProgress"
+			transit_date: value === "InProgress" ? undefined : prev.transit_date,
+		}));
+	};
+
+	// Handle transit_date change
+	const handleDateChange = (field: string, value: string) => {
 		setEmployee((prev) => ({
 			...prev,
 			[field]: value,
@@ -167,11 +187,38 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 				</div>
 				{/* Pass Type */}
 				<div className="col-md-6">
-					<label htmlFor="pass_type" className="form-label mt-4">
+					<label htmlFor="pass_type" className="form-label">
 						Employee Pass Type
 					</label>
 					<input type="text" id="pass_type" className="form-control" value={employee.pass_type || ""} onChange={(e) => handleInputChange("pass_type", e.target.value)} />
 				</div>
+				<div className="col-md-6">
+					<label htmlFor="employee_status" className="form-label">
+						Employee Status
+					</label>
+					<select id="employee_status" className="form-select" value={employee.status} onChange={(e) => handleStatusChange("status", e.target.value)} required>
+						<option value="InProgress">In Progress</option>
+						<option value="Passed">Passed</option>
+						<option value="Terminated">Terminated</option>
+					</select>
+				</div>
+
+				{/* Conditionally render the transit_date field */}
+				{(employee.status === "Passed" || employee.status === "Terminated") && (
+					<div className="col-md-6">
+						<label htmlFor="transit_date" className="form-label">
+							Transit Date
+						</label>
+						<input
+							id="transit_date"
+							type="date"
+							className="form-control"
+							value={employee.transit_date ? new Date(employee.transit_date).toISOString().split("T")[0] : ""}
+							onChange={(e) => handleDateChange("transit_date", e.target.value)}
+							required
+						/>
+					</div>
+				)}
 				{/* Training Form */}
 				<div className="col-md-6">
 					<label htmlFor="training_form" className="form-label">
@@ -232,18 +279,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 				<div className="col-md-12 mt-4">
 					<div className="card p-3">
 						<h5 className="card-title">Employee Status</h5>
-						<div className="form-check form-switch">
-							<input
-								type="checkbox"
-								id="terminated"
-								className="form-check-input"
-								checked={employee.terminated || false}
-								onChange={(e) => handleInputChange("terminated", e.target.checked)}
-							/>
-							<label htmlFor="terminated" className="form-check-label">
-								Is this employee terminated?
-							</label>
-						</div>
 						<div className="form-check form-switch mt-2">
 							<input
 								type="checkbox"
@@ -254,18 +289,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 							/>
 							<label htmlFor="extended_probation" className="form-check-label">
 								Is this employee on extended probation?
-							</label>
-						</div>
-						<div className="form-check form-switch mt-2">
-							<input
-								type="checkbox"
-								id="passed_probation"
-								className="form-check-input"
-								checked={employee.passed_probation || false}
-								onChange={(e) => handleInputChange("passed_probation", e.target.checked)}
-							/>
-							<label htmlFor="passed_probation" className="form-check-label">
-								Has this employee passed probation?
 							</label>
 						</div>
 					</div>
