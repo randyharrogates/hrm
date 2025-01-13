@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api";
 import { IEmployee, IObservationReport } from "@shared/types/employee";
-import { IMasterCrew, ISeniorCrew, IIntern, ISpecialistTrainee, ILocalCrew, IForeignCrew } from "../types/Employee";
+import { IMasterCrew, ISeniorCrew, IIntern, ISpecialistTrainee, ILocalCrew, IForeignCrew, IDirectIntake } from "../types/Employee";
 
 const EmployeePage: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
@@ -24,6 +24,8 @@ const EmployeePage: React.FC = () => {
 	const isLocalCrew = (employee: IEmployee): employee is ILocalCrew => employee.employee_type === "LocalCrew";
 
 	const isForeignCrew = (employee: IEmployee): employee is IForeignCrew => employee.employee_type === "ForeignCrew";
+
+	const isDirectIntake = (employee: IEmployee): employee is IDirectIntake => employee.employee_type === "DirectIntake";
 
 	useEffect(() => {
 		const fetchEmployee = async () => {
@@ -77,18 +79,6 @@ const EmployeePage: React.FC = () => {
 			return (
 				<>
 					<p>
-						<strong>Training Form:</strong> {employee.training_form}
-					</p>
-					<p>
-						<strong>14-Hour Shift:</strong> {employee.forteen_hours_shift ? new Date(employee.forteen_hours_shift).toLocaleDateString() : "N/A"}
-					</p>
-					<p>
-						<strong>Verbal and Practical:</strong> {employee.verbal_and_practical ? new Date(employee.verbal_and_practical).toLocaleDateString() : "N/A"}
-					</p>
-					<p>
-						<strong>Certificate:</strong> {employee.certificate}
-					</p>
-					<p>
 						<strong>Senior Crew Remarks:</strong> {employee.senior_crew_remarks}
 					</p>
 				</>
@@ -99,7 +89,7 @@ const EmployeePage: React.FC = () => {
 			return (
 				<>
 					<p>
-						<strong>Mentor:</strong> {employee.mentor}
+						<strong>Mentor:</strong> {employee.mentor ? employee.mentor : "N/A"}
 					</p>
 					<p>
 						<strong>Intern Start Date:</strong> {employee.intern_start_date ? new Date(employee.intern_start_date).toLocaleDateString() : "N/A"}
@@ -108,7 +98,7 @@ const EmployeePage: React.FC = () => {
 						<strong>Intern End Date:</strong> {employee.intern_end_date ? new Date(employee.intern_end_date).toLocaleDateString() : "N/A"}
 					</p>
 					<p>
-						<strong>Intern Remarks:</strong> {employee.intern_remarks}
+						<strong>Intern Remarks:</strong> {employee.intern_remarks ? employee.intern_remarks : "N/A"}
 					</p>
 				</>
 			);
@@ -118,16 +108,16 @@ const EmployeePage: React.FC = () => {
 			return (
 				<>
 					<p>
-						<strong>Training Form:</strong> {employee.training_form}
+						<strong>Specialist Trainee Remarks:</strong> {employee.specialist_trainee_remarks ? employee.specialist_trainee_remarks : "N/A"}
 					</p>
+				</>
+			);
+		}
+		if (isDirectIntake(employee)) {
+			return (
+				<>
 					<p>
-						<strong>14-Hour Shift:</strong> {employee.forteen_hours_shift ? new Date(employee.forteen_hours_shift).toLocaleDateString() : "N/A"}
-					</p>
-					<p>
-						<strong>Verbal and Practical:</strong> {employee.verbal_and_practical ? new Date(employee.verbal_and_practical).toLocaleDateString() : "N/A"}
-					</p>
-					<p>
-						<strong>Specialist Trainee Remarks:</strong> {employee.specialist_trainee_remarks}
+						<strong>Direct Intake Remarks:</strong> {employee.direct_intake_remarks ? employee.direct_intake_remarks : "N/A"}
 					</p>
 				</>
 			);
@@ -137,16 +127,7 @@ const EmployeePage: React.FC = () => {
 			return (
 				<>
 					<p>
-						<strong>Training Form:</strong> {employee.training_form}
-					</p>
-					<p>
-						<strong>14-Hour Shift:</strong> {employee.forteen_hours_shift ? new Date(employee.forteen_hours_shift).toLocaleDateString() : "N/A"}
-					</p>
-					<p>
-						<strong>Verbal and Practical:</strong> {employee.verbal_and_practical ? new Date(employee.verbal_and_practical).toLocaleDateString() : "N/A"}
-					</p>
-					<p>
-						<strong>Local Crew Remarks:</strong> {employee.local_crew_remarks}
+						<strong>Local Crew Remarks:</strong> {employee.local_crew_remarks ? employee.local_crew_remarks : "N/A"}
 					</p>
 				</>
 			);
@@ -156,19 +137,7 @@ const EmployeePage: React.FC = () => {
 			return (
 				<>
 					<p>
-						<strong>Training Form:</strong> {employee.training_form}
-					</p>
-					<p>
-						<strong>14-Hour Shift:</strong> {employee.forteen_hours_shift ? new Date(employee.forteen_hours_shift).toLocaleDateString() : "N/A"}
-					</p>
-					<p>
-						<strong>Verbal and Practical:</strong> {employee.verbal_and_practical ? new Date(employee.verbal_and_practical).toLocaleDateString() : "N/A"}
-					</p>
-					<p>
-						<strong>Foreign Crew Remarks:</strong> {employee.foreign_crew_remarks}
-					</p>
-					<p>
-						<strong>Employee Pass Type:</strong> {employee.pass_type}
+						<strong>Foreign Crew Remarks:</strong> {employee.foreign_crew_remarks ? employee.foreign_crew_remarks : "N/A"}
 					</p>
 				</>
 			);
@@ -211,7 +180,25 @@ const EmployeePage: React.FC = () => {
 						<strong>Probation End Date:</strong> {employee.probation_end_date ? new Date(employee.probation_end_date).toLocaleDateString() : "Not available"}
 					</p>
 					<p>
+						<strong>Employee Pass Type:</strong> {employee.pass_type || "None"}
+					</p>
+					<p>
 						<strong>Remarks:</strong> {employee.remarks || "None"}
+					</p>
+					<p>
+						<strong>Training Form:</strong> {employee.training_form ? employee.training_form : "N/A"}
+					</p>
+					<p>
+						<strong>14-Hour Shift:</strong> {employee.forteen_hours_shift ? new Date(employee.forteen_hours_shift).toLocaleDateString() : "N/A"}
+					</p>
+					<p>
+						<strong>Verbal and Practical:</strong> {employee.verbal_and_practical ? new Date(employee.verbal_and_practical).toLocaleDateString() : "N/A"}
+					</p>
+					<p>
+						<strong>Certificate:</strong> {employee.certificate ? employee.certificate : "N/A"}
+					</p>
+					<p>
+						<strong>Hourly Rate:</strong> {employee.hourly_rate ? employee.hourly_rate : "N/A"}
 					</p>
 					<p>
 						<strong>Terminated?:</strong> {employee.terminated ? "Yes" : "No"}

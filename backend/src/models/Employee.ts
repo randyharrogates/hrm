@@ -9,10 +9,6 @@ export interface IMasterCrew extends IEmployee {
 }
 
 export interface ISeniorCrew extends IEmployee {
-	training_form: string;
-	forteen_hours_shift: Date;
-	verbal_and_practical: Date;
-	certificate: string;
 	senior_crew_remarks: string;
 }
 
@@ -24,25 +20,19 @@ export interface IIntern extends IEmployee {
 }
 
 export interface ISpecialistTrainee extends IEmployee {
-	training_form: string;
-	forteen_hours_shift: Date;
-	verbal_and_practical: Date;
 	specialist_trainee_remarks: string;
 }
 
 export interface ILocalCrew extends IEmployee {
-	training_form: string;
-	forteen_hours_shift: Date;
-	verbal_and_practical: Date;
 	local_crew_remarks: string;
 }
 
 export interface IForeignCrew extends IEmployee {
-	training_form: string;
-	forteen_hours_shift: Date;
-	verbal_and_practical: Date;
-	pass_type: string;
 	foreign_crew_remarks: string;
+}
+
+export interface IDirectIntake extends IEmployee {
+	direct_intake_remarks: string;
 }
 
 const ObservationReportSchema: Schema = new Schema({
@@ -156,6 +146,12 @@ const BaseEmployeeSchema: Schema = new Schema({
 	passed_probation: { type: Boolean, default: false },
 	terminated: { type: Boolean, default: false },
 	remarks: { type: String },
+	training_form: { type: String },
+	forteen_hours_shift: { type: Date },
+	verbal_and_practical: { type: Date },
+	certificate: { type: String, required: false },
+	hourly_rate: { type: Number, required: false },
+	pass_type: { type: String, required: false },
 	overall_grading_score: { type: Number, default: 0 },
 	observationReports: { type: [ObservationReportSchema], default: [] },
 });
@@ -210,10 +206,6 @@ BaseEmployeeSchema.pre("save", async function (next) {
 	next();
 });
 
-
-
-
-
 BaseEmployeeSchema.statics.updateOverallScore = async function (employeeId: string) {
 	const employee = await this.findById(employeeId);
 	if (!employee) throw new Error("Employee not found");
@@ -248,10 +240,6 @@ const MasterCrewEmployeeModel = EmployeeModel.discriminator<IMasterCrew>(
 const SeniorCrewEmployeeModel = EmployeeModel.discriminator<ISeniorCrew>(
 	"SeniorCrewEmployee",
 	new Schema({
-		training_form: { type: String },
-		forteen_hours_shift: { type: Date },
-		verbal_and_practical: { type: Date },
-		certificate: { type: String },
 		senior_crew_remarks: { type: String },
 	})
 );
@@ -270,9 +258,6 @@ const InternModel = EmployeeModel.discriminator<IIntern>(
 const SpecialistTraineeModel = EmployeeModel.discriminator<ISpecialistTrainee>(
 	"SpecialistTrainee",
 	new Schema({
-		training_form: { type: String },
-		forteen_hours_shift: { type: Date },
-		verbal_and_practical: { type: Date },
 		specialist_trainee_remarks: { type: String },
 	})
 );
@@ -280,22 +265,25 @@ const SpecialistTraineeModel = EmployeeModel.discriminator<ISpecialistTrainee>(
 const LocalCrewModel = EmployeeModel.discriminator<ILocalCrew>(
 	"LocalCrew",
 	new Schema({
-		training_form: { type: String },
-		forteen_hours_shift: { type: Date },
-		verbal_and_practical: { type: Date },
 		local_crew_remarks: { type: String },
+		pass_type: { type: String },
 	})
 );
 
 const ForeignCrewModel = EmployeeModel.discriminator<IForeignCrew>(
 	"ForeignCrew",
 	new Schema({
-		training_form: { type: String },
-		forteen_hours_shift: { type: Date },
-		verbal_and_practical: { type: Date },
 		pass_type: { type: String },
 		foreign_crew_remarks: { type: String },
 	})
 );
 
-export { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, SpecialistTraineeModel, InternModel, LocalCrewModel, ForeignCrewModel, ObservationReportSchema };
+const DirectIntakeModel = EmployeeModel.discriminator<IDirectIntake>(
+	"DirectIntake",
+	new Schema({
+		pass_type: { type: String },
+		direct_intake_remarks: { type: String },
+	})
+);
+
+export { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, SpecialistTraineeModel, InternModel, LocalCrewModel, ForeignCrewModel, DirectIntakeModel, ObservationReportSchema };

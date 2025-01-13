@@ -110,6 +110,12 @@ export interface IEmployee {
 	passed_probation: boolean;
 	terminated: boolean;
 	remarks: string;
+	training_form: string;
+	forteen_hours_shift: Date;
+	verbal_and_practical: Date;
+	certificate: string;
+	hourly_rate: number;
+	pass_type: string;
 	overall_grading_score: number;
 	observationReports: IObservationReport[];
 }

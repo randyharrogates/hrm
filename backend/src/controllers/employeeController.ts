@@ -1,7 +1,7 @@
 /** @format */
 
 import { Request, Response } from "express";
-import { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, InternModel, SpecialistTraineeModel, LocalCrewModel, ForeignCrewModel } from "../models/Employee";
+import { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, InternModel, SpecialistTraineeModel, LocalCrewModel, ForeignCrewModel, DirectIntakeModel } from "../models/Employee";
 
 // Get all employees
 export const getAllEmployees = async (req: Request, res: Response): Promise<void> => {
@@ -56,6 +56,9 @@ export const createEmployee = async (req: Request, res: Response): Promise<void>
 			case "ForeignCrew":
 				EmployeeModelToUse = ForeignCrewModel;
 				break;
+			case "DirectIntake":
+				EmployeeModelToUse = DirectIntakeModel;
+				break;
 			default:
 				EmployeeModelToUse = EmployeeModel;
 		}
@@ -93,7 +96,8 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
 			| typeof InternModel
 			| typeof SpecialistTraineeModel
 			| typeof LocalCrewModel
-			| typeof ForeignCrewModel;
+			| typeof ForeignCrewModel
+			| typeof DirectIntakeModel;
 
 		switch (employee_type) {
 			case "MasterCrewEmployee":
