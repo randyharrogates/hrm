@@ -31,6 +31,12 @@ const HomePage: React.FC = () => (
 				<li className="list-group-item">
 					<i className="bi bi-file-earmark-bar-graph-fill text-danger"></i> Generate and manage observation reports
 				</li>
+				<li className="list-group-item">
+					<i className="bi bi-bar-chart-fill text-danger"></i> Export employee information
+				</li>
+				<li className="list-group-item">
+					<i className="bi bi-file-earmark-excel text-danger"></i> Upload multiple observation reports
+				</li>
 			</ul>
 		</section>
 

@@ -15,6 +15,8 @@ const EmployeeList: React.FC = () => {
 	const [searchQuery, setSearchQuery] = useState<string>("");
 	const [sortColumn, setSortColumn] = useState<keyof EmployeeTypes | null>(null); // Track the current column for sorting
 	const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc"); // Track sort direction
+	const [extendedProbationFilter, setExtendedProbationFilter] = useState<string>(""); // Filter for extended probation
+	const [statusFilter, setStatusFilter] = useState<string>(""); // Filter for employee status
 	const navigate = useNavigate();
 
 	// Fetch employees from the backend
@@ -171,6 +173,8 @@ const EmployeeList: React.FC = () => {
 			employee.name?.toLowerCase().includes(query) ||
 			employee.contact?.toLowerCase().includes(query) ||
 			employee.employee_type?.toLowerCase().includes(query) ||
+			employee.training_outlet?.toLowerCase().includes(query) ||
+			employee.outlet?.toLowerCase().includes(query) ||
 			(employee.overall_grading_score ? employee.overall_grading_score.toString().includes(query) : false);
 
 		// Date range filter
@@ -180,8 +184,14 @@ const EmployeeList: React.FC = () => {
 		const rangeEnd = endRange ? new Date(endRange) : null;
 
 		const matchesDateRange = (!rangeStart || (startDate && startDate >= rangeStart)) && (!rangeEnd || (endDate && endDate <= rangeEnd));
+		// Extended Probation filter
+		const matchesExtendedProbation =
+			extendedProbationFilter === "" || (extendedProbationFilter === "Yes" && employee.extended_probation) || (extendedProbationFilter === "No" && !employee.extended_probation);
 
-		return matchesSearch && matchesDateRange;
+		// Status filter
+		const matchesStatus = statusFilter === "" || employee.status === statusFilter;
+
+		return matchesSearch && matchesDateRange && matchesExtendedProbation && matchesStatus;
 	});
 
 	// Export to Excel
@@ -228,6 +238,29 @@ const EmployeeList: React.FC = () => {
 						Probation End Date Range
 					</label>
 					<input type="date" id="end-range" className="form-control" value={endRange} onChange={(e) => setEndRange(e.target.value)} />
+				</div>
+			</div>
+			<div className="row mb-4">
+				<div className="col-md-4">
+					<label htmlFor="extended-probation" className="form-label">
+						Extended Probation
+					</label>
+					<select id="extended-probation" className="form-control" value={extendedProbationFilter} onChange={(e) => setExtendedProbationFilter(e.target.value)}>
+						<option value="">All</option>
+						<option value="Yes">Yes</option>
+						<option value="No">No</option>
+					</select>
+				</div>
+				<div className="col-md-4">
+					<label htmlFor="employee-status" className="form-label">
+						Employee Status
+					</label>
+					<select id="employee-status" className="form-control" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+						<option value="">All</option>
+						<option value="InProgress">In Progress</option>
+						<option value="Passed">Passed</option>
+						<option value="Terminated">Terminated</option>
+					</select>
 				</div>
 			</div>
 
