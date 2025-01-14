@@ -7,7 +7,7 @@ import { EmployeeModel, MasterCrewEmployeeModel, SeniorCrewEmployeeModel, Intern
 export const getAllEmployees = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const employees = await EmployeeModel.find();
-		console.log("Number of Employees fetched:", employees.length);
+		// console.log("Number of Employees fetched:", employees.length);
 		res.status(200).json(employees);
 	} catch (error) {
 		res.status(500).json({ message: "Error fetching employees", error });

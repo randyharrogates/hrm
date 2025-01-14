@@ -3,7 +3,7 @@ FROM node:22
 WORKDIR /app
 
 # Copy shared folder
-COPY ../shared /app/shared
+COPY ./shared /app/shared
 
 # Copy backend
 COPY ./backend /app/backend
