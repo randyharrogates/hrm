@@ -1,7 +1,9 @@
 FROM node:22
 
+WORKDIR /app
+
 # Copy shared folder
-COPY ../shared /app/shared
+COPY ./shared /app/shared
 
 # Copy frontend
 COPY ./frontend /app/frontend

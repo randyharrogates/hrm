@@ -1,9 +1,8 @@
-version: '3.8'
-
 services:
   frontend:
     build:
-      context: ./frontend
+      context: .
+      dockerfile: ./frontend/Dockerfile
     ports:
       - "3000:3000"
     container_name: frontend-container
@@ -11,32 +10,36 @@ services:
       - backend
     networks:
       - app-network
+    restart: always
 
   backend:
     build:
-      context: ./backend
+      context: .
+      dockerfile: ./backend/Dockerfile
     ports:
       - "5000:5000"
     container_name: backend-container
     depends_on:
-      - mongo
-    environment:
-      MONGO_URI: mongodb://mongo:27017/hrm
+      - mongodb
     networks:
       - app-network
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/hrm
+    restart: always
 
-  mongo:
-    image: mongo:5.0
+  mongodb:
+    image: mongo:latest
     container_name: mongodb-container
     ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
+      - "28017:27017"
     networks:
       - app-network
-
-volumes:
-  mongo-data:
+    volumes:
+      - mongodb-data:/data/db
+    restart: always
 
 networks:
   app-network:
+
+volumes:
+  mongodb-data:
