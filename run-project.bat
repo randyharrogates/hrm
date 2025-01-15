@@ -20,7 +20,7 @@ if not exist node_modules (
     echo Installing backend dependencies...
     npm install
 )
-start "" /b npm run dev
+start "" /b cmd /c "cd %BACKEND_DIR% && npm run dev"
 cd ..
 
 :: Start the frontend
@@ -30,7 +30,7 @@ if not exist node_modules (
     echo Installing frontend dependencies...
     npm install
 )
-start "" /b npm start
+start "" /b cmd /c "cd %FRONTEND_DIR% && npm start"
 cd ..
 
 :: Reminder that everything is running
