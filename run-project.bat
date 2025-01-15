@@ -7,7 +7,7 @@ set SHARED_DIR=.\shared
 
 :: Start MongoDB
 echo Starting MongoDB...
-start "" "C:\Program Files\MongoDB\Server\8.0\bin\mongod.exe" --dbpath="C:\data\db"
+start "" /b "C:\Program Files\MongoDB\Server\8.0\bin\mongod.exe" --dbpath="C:\data\db"
 
 :: Check if MongoDB started
 timeout /t 3 > nul
@@ -20,7 +20,7 @@ if not exist node_modules (
     echo Installing backend dependencies...
     npm install
 )
-start "" npm run dev
+start "" /b npm run dev
 cd ..
 
 :: Start the frontend
@@ -30,7 +30,7 @@ if not exist node_modules (
     echo Installing frontend dependencies...
     npm install
 )
-start "" npm start
+start "" /b npm start
 cd ..
 
 :: Reminder that everything is running
