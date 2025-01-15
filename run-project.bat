@@ -7,7 +7,7 @@ set SHARED_DIR=.\shared
 
 :: Start MongoDB
 echo Starting MongoDB...
-start "" "C:\Program Files\MongoDB\Server\6.0\bin\mongod.exe" --dbpath="C:\data\db"
+start "" "C:\Program Files\MongoDB\Server\8.0\bin\mongod.exe" --dbpath="C:\data\db"
 
 :: Check if MongoDB started
 timeout /t 3 > nul
