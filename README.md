@@ -92,3 +92,9 @@ npm start
 MONGO_URI=mongodb://127.0.0.1:27017/hrm
 PORT=5000
 ```
+
+
+### Using docker for running
+```bash
+docker-compose up --build -d
+```
