@@ -12,69 +12,69 @@ export const initializeObservationReport = (): ObservationReport => ({
 	week_start_date: new Date(),
 	training_centre: "",
 	overall_score: 0,
-	aprons_sop: 1,
-	grooming: 1,
-	facial_exp: 1,
+	aprons_sop: null,
+	grooming: null,
+	facial_exp: null,
 	app_remarks: "",
-	handling_knowledge: 1,
-	location_knowledge: 1,
-	accounting: 1,
-	eq_knowledge: 1,
+	handling_knowledge: null,
+	location_knowledge: null,
+	accounting: null,
+	eq_knowledge: null,
 	eq_remarks: "",
-	product_knowledge: 1,
-	outlet_knowledge: 1,
-	opening_readiness: 1,
-	float_and_front: 1,
-	cleanliness: 1,
-	pest_control_awareness: 1,
-	pos_closing: 1,
-	eq_washing: 1,
-	safe_storage: 1,
-	applicances: 1,
-	floor_cleanliness: 1,
+	product_knowledge: null,
+	outlet_knowledge: null,
+	opening_readiness: null,
+	float_and_front: null,
+	cleanliness: null,
+	pest_control_awareness: null,
+	pos_closing: null,
+	eq_washing: null,
+	safe_storage: null,
+	applicances: null,
+	floor_cleanliness: null,
 	daily_ops_remarks: "",
-	mixing_sop: 1,
-	cooking_quality: 1,
+	mixing_sop: null,
+	cooking_quality: null,
 	cooking_remarks: "",
-	skin_quality: 1,
-	filling_consistency: 1,
-	foreign_object_check: 1,
-	cut_size: 1,
-	rejected_handling: 1,
+	skin_quality: null,
+	filling_consistency: null,
+	foreign_object_check: null,
+	cut_size: null,
+	rejected_handling: null,
 	final_product_remarks: "",
-	team_conversation: 1,
-	cust_conversation: 1,
-	listening_skills: 1,
-	broadcasting: 1,
-	instruction_understanding: 1,
+	team_conversation: null,
+	cust_conversation: null,
+	listening_skills: null,
+	broadcasting: null,
+	instruction_understanding: null,
 	communication_remarks: "",
-	team_efficiency: 1,
-	rotation_confidence: 1,
-	camaraderie: 1,
-	assist_initiative: 1,
+	team_efficiency: null,
+	rotation_confidence: null,
+	camaraderie: null,
+	assist_initiative: null,
 	teamwork_remarks: "",
-	politeness: 1,
-	service: 1,
-	upsell: 1,
-	empathy: 1,
+	politeness: null,
+	service: null,
+	upsell: null,
+	empathy: null,
 	customer_service_remarks: "",
-	calmness: 1,
-	solving_effectiveness: 1,
-	reporting: 1,
+	calmness: null,
+	solving_effectiveness: null,
+	reporting: null,
 	problem_solving_remarks: "",
-	food_safety: 1,
-	safe_workplace: 1,
-	pest_control: 1,
+	food_safety: null,
+	safe_workplace: null,
+	pest_control: null,
 	industry_knowledge_remarks: "",
-	willingness_to_cover: 1,
-	willingness_to_do_more: 1,
-	work_independantly: 1,
+	willingness_to_cover: null,
+	willingness_to_do_more: null,
+	work_independantly: null,
 	attitude_remarks: "",
-	cust_satisfaction: 1,
-	inventory: 1,
-	sales: 1,
-	individual: 1,
-	team: 1,
+	cust_satisfaction: null,
+	inventory: null,
+	sales: null,
+	individual: null,
+	team: null,
 	kpi_awareness_remarks: "",
 	evaluator: "",
 });
@@ -82,99 +82,100 @@ export const initializeObservationReport = (): ObservationReport => ({
 const fieldConfigs = [
 	// General Section
 	{ id: "week_start_date", label: "Week Start Date", type: "date", section: "General", required: true },
-	{ id: "training_centre", label: "Training Centre", type: "text", section: "General", required: true },
+	{ id: "training_centre", label: "Training Centre", type: "text", section: "General", required: false },
 	{ id: "overall_score", label: "overall_score", type: "number", section: "General", required: false },
 
 	// Appearance Section
-	{ id: "aprons_sop", label: "SOP for Aprons", type: "number", min: 1, max: 5, step: 1, section: "Appearance", required: true },
-	{ id: "grooming", label: "Grooming Score", type: "number", min: 1, max: 5, section: "Appearance", required: true },
-	{ id: "facial_exp", label: "Facial Expression Score", type: "number", min: 1, max: 5, section: "Appearance", required: true },
+	{ id: "aprons_sop", label: "SOP for Aprons", type: "number", min: 1, max: 5, step: 1, section: "Appearance", required: false },
+	{ id: "grooming", label: "Grooming Score", type: "number", min: 1, max: 5, section: "Appearance", required: false },
+	{ id: "facial_exp", label: "Facial Expression Score", type: "number", min: 1, max: 5, section: "Appearance", required: false },
 	{ id: "app_remarks", label: "Appearance Remarks", type: "text", section: "Appearance", required: false },
 
 	// Equipment Section
-	{ id: "handling_knowledge", label: "Handling Knowledge", type: "number", min: 1, max: 5, section: "Equipment", required: true },
-	{ id: "location_knowledge", label: "Location Knowledge", type: "number", min: 1, max: 5, section: "Equipment", required: true },
-	{ id: "accounting", label: "Accounting Knowledge", type: "number", min: 1, max: 5, section: "Equipment", required: true },
-	{ id: "eq_knowledge", label: "Equipment Knowledge", type: "number", section: "Equipment", required: true },
+	{ id: "handling_knowledge", label: "Handling Knowledge", type: "number", min: 1, max: 5, section: "Equipment", required: false },
+	{ id: "eq_knowledge", label: "Mgmt/Maintenance Check", type: "number", section: "Equipment", required: false },
+	{ id: "location_knowledge", label: "Location Knowledge", type: "number", min: 1, max: 5, section: "Equipment", required: false },
+	{ id: "accounting", label: "Accounting Knowledge", type: "number", min: 1, max: 5, section: "Equipment", required: false },
+
 	{ id: "eq_remarks", label: "Equipment Remarks", type: "text", section: "Equipment", required: false },
 
 	// Daily Operations Section
-	{ id: "product_knowledge", label: "Product Knowledge", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
-	{ id: "outlet_knowledge", label: "Outlet Knowledge", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
-	{ id: "opening_readiness", label: "Opening Readiness", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
-	{ id: "float_and_front", label: "Float and Front Management", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
-	{ id: "cleanliness", label: "Cleanliness", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
-	{ id: "pest_control_awareness", label: "Pest Control Awareness", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
-	{ id: "pos_closing", label: "POS Closing", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
-	{ id: "eq_washing", label: "Equipment Washing", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
-	{ id: "safe_storage", label: "Safe Storage", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
-	{ id: "applicances", label: "Appliances Usage", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
-	{ id: "floor_cleanliness", label: "Floor Cleanliness", type: "number", min: 1, max: 5, section: "Daily Operations", required: true },
+	{ id: "product_knowledge", label: "Product Knowledge", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
+	{ id: "outlet_knowledge", label: "Outlet Knowledge", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
+	{ id: "opening_readiness", label: "Opening Readiness", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
+	{ id: "float_and_front", label: "Float and Front Management", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
+	{ id: "cleanliness", label: "Cleanliness", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
+	{ id: "pest_control_awareness", label: "Pest Control Awareness", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
+	{ id: "pos_closing", label: "POS Closing", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
+	{ id: "eq_washing", label: "Equipment Washing", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
+	{ id: "safe_storage", label: "Safe Storage", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
+	{ id: "applicances", label: "Appliances Usage", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
+	{ id: "floor_cleanliness", label: "Floor Cleanliness", type: "number", min: 1, max: 5, section: "Daily Operations", required: false },
 	{ id: "daily_ops_remarks", label: "Daily Operations Remarks", type: "text", section: "Daily Operations", required: false },
 
 	// Batter Mixing / Cooking Section
-	{ id: "mixing_sop", label: "Mixing SOP Compliance", type: "number", min: 1, max: 5, section: "Batter Mixing / Cooking", required: true },
-	{ id: "cooking_quality", label: "Cooking Quality", type: "number", min: 1, max: 5, section: "Batter Mixing / Cooking", required: true },
+	{ id: "mixing_sop", label: "Mixing SOP Compliance", type: "number", min: 1, max: 5, section: "Batter Mixing / Cooking", required: false },
+	{ id: "cooking_quality", label: "Cooking Quality", type: "number", min: 1, max: 5, section: "Batter Mixing / Cooking", required: false },
 	{ id: "cooking_remarks", label: "Cooking Remarks", type: "text", section: "Batter Mixing / Cooking", required: false },
 
 	// Final Product Quality Section
-	{ id: "skin_quality", label: "Skin Quality", type: "number", min: 1, max: 5, section: "Final Product Quality", required: true },
-	{ id: "filling_consistency", label: "Filling Consistency", type: "number", min: 1, max: 5, section: "Final Product Quality", required: true },
-	{ id: "foreign_object_check", label: "Foreign Object Check", type: "number", min: 1, max: 5, section: "Final Product Quality", required: true },
-	{ id: "cut_size", label: "Cut Size Consistency", type: "number", min: 1, max: 5, section: "Final Product Quality", required: true },
-	{ id: "rejected_handling", label: "Rejected Handling", type: "number", min: 1, max: 5, section: "Final Product Quality", required: true },
+	{ id: "skin_quality", label: "Skin Quality", type: "number", min: 1, max: 5, section: "Final Product Quality", required: false },
+	{ id: "filling_consistency", label: "Filling Consistency", type: "number", min: 1, max: 5, section: "Final Product Quality", required: false },
+	{ id: "foreign_object_check", label: "Foreign Object Check", type: "number", min: 1, max: 5, section: "Final Product Quality", required: false },
+	{ id: "cut_size", label: "Cut Size Consistency", type: "number", min: 1, max: 5, section: "Final Product Quality", required: false },
+	{ id: "rejected_handling", label: "Rejected Handling", type: "number", min: 1, max: 5, section: "Final Product Quality", required: false },
 	{ id: "final_product_remarks", label: "Final Product Remarks", type: "text", section: "Final Product Quality", required: false },
 
 	// Communication Section
-	{ id: "team_conversation", label: "Team Conversation", type: "number", min: 1, max: 5, section: "Communication", required: true },
-	{ id: "cust_conversation", label: "Customer Conversation", type: "number", min: 1, max: 5, section: "Communication", required: true },
-	{ id: "listening_skills", label: "Listening Skills", type: "number", min: 1, max: 5, section: "Communication", required: true },
-	{ id: "broadcasting", label: "Broadcasting", type: "number", min: 1, max: 5, section: "Communication", required: true },
-	{ id: "instruction_understanding", label: "Instruction Understanding", type: "number", min: 1, max: 5, section: "Communication", required: true },
+	{ id: "team_conversation", label: "Team Conversation", type: "number", min: 1, max: 5, section: "Communication", required: false },
+	{ id: "cust_conversation", label: "Customer Conversation", type: "number", min: 1, max: 5, section: "Communication", required: false },
+	{ id: "listening_skills", label: "Listening Skills", type: "number", min: 1, max: 5, section: "Communication", required: false },
+	{ id: "broadcasting", label: "Broadcasting", type: "number", min: 1, max: 5, section: "Communication", required: false },
+	{ id: "instruction_understanding", label: "Instruction Understanding", type: "number", min: 1, max: 5, section: "Communication", required: false },
 	{ id: "communication_remarks", label: "Communication Remarks", type: "text", section: "Communication", required: false },
 
 	// Teamwork Section
-	{ id: "team_efficiency", label: "Team Efficiency", type: "number", min: 1, max: 5, section: "Teamwork", required: true },
-	{ id: "rotation_confidence", label: "Rotation Confidence", type: "number", min: 1, max: 5, section: "Teamwork", required: true },
-	{ id: "camaraderie", label: "Camaraderie", type: "number", min: 1, max: 5, section: "Teamwork", required: true },
-	{ id: "assist_initiative", label: "Assist Initiative", type: "number", min: 1, max: 5, section: "Teamwork", required: true },
+	{ id: "team_efficiency", label: "Team Efficiency", type: "number", min: 1, max: 5, section: "Teamwork", required: false },
+	{ id: "rotation_confidence", label: "Rotation Confidence", type: "number", min: 1, max: 5, section: "Teamwork", required: false },
+	{ id: "camaraderie", label: "Camaraderie", type: "number", min: 1, max: 5, section: "Teamwork", required: false },
+	{ id: "assist_initiative", label: "Assist Initiative", type: "number", min: 1, max: 5, section: "Teamwork", required: false },
 	{ id: "teamwork_remarks", label: "Teamwork Remarks", type: "text", section: "Teamwork", required: false },
 
 	// Customer Service Section
-	{ id: "politeness", label: "Politeness", type: "number", min: 1, max: 5, section: "Customer Service", required: true },
-	{ id: "service", label: "Service", type: "number", min: 1, max: 5, section: "Customer Service", required: true },
-	{ id: "upsell", label: "Upsell", type: "number", min: 1, max: 5, section: "Customer Service", required: true },
-	{ id: "empathy", label: "Empathy", type: "number", min: 1, max: 5, section: "Customer Service", required: true },
+	{ id: "politeness", label: "Politeness", type: "number", min: 1, max: 5, section: "Customer Service", required: false },
+	{ id: "service", label: "Service", type: "number", min: 1, max: 5, section: "Customer Service", required: false },
+	{ id: "upsell", label: "Upsell", type: "number", min: 1, max: 5, section: "Customer Service", required: false },
+	{ id: "empathy", label: "Empathy", type: "number", min: 1, max: 5, section: "Customer Service", required: false },
 	{ id: "customer_service_remarks", label: "Customer Service Remarks", type: "text", section: "Customer Service", required: false },
 
 	// Problem Solving Section
-	{ id: "calmness", label: "Calmness", type: "number", min: 1, max: 5, section: "Problem Solving", required: true },
-	{ id: "solving_effectiveness", label: "Solving Effectiveness", type: "number", min: 1, max: 5, section: "Problem Solving", required: true },
-	{ id: "reporting", label: "Reporting", type: "number", min: 1, max: 5, section: "Problem Solving", required: true },
+	{ id: "calmness", label: "Calmness", type: "number", min: 1, max: 5, section: "Problem Solving", required: false },
+	{ id: "solving_effectiveness", label: "Solving Effectiveness", type: "number", min: 1, max: 5, section: "Problem Solving", required: false },
+	{ id: "reporting", label: "Reporting", type: "number", min: 1, max: 5, section: "Problem Solving", required: false },
 	{ id: "problem_solving_remarks", label: "Problem Solving Remarks", type: "text", section: "Problem Solving", required: false },
 
 	// Industry Knowledge Section
-	{ id: "food_safety", label: "Food Safety", type: "number", min: 1, max: 5, section: "Industry Knowledge", required: true },
-	{ id: "safe_workplace", label: "Safe Workplace", type: "number", min: 1, max: 5, section: "Industry Knowledge", required: true },
-	{ id: "pest_control", label: "Pest Control", type: "number", min: 1, max: 5, section: "Industry Knowledge", required: true },
+	{ id: "food_safety", label: "Food Safety", type: "number", min: 1, max: 5, section: "Industry Knowledge", required: false },
+	{ id: "safe_workplace", label: "Safe Workplace", type: "number", min: 1, max: 5, section: "Industry Knowledge", required: false },
+	{ id: "pest_control", label: "Pest Control", type: "number", min: 1, max: 5, section: "Industry Knowledge", required: false },
 	{ id: "industry_knowledge_remarks", label: "Industry Knowledge Remarks", type: "text", section: "Industry Knowledge", required: false },
 
 	// Initiative and Attitude Section
-	{ id: "willingness_to_cover", label: "Willingness to Cover", type: "number", min: 1, max: 5, section: "Initiative and Attitude", required: true },
-	{ id: "willingness_to_do_more", label: "Willingness to Do More", type: "number", min: 1, max: 5, section: "Initiative and Attitude", required: true },
-	{ id: "work_independantly", label: "Work Independently", type: "number", min: 1, max: 5, section: "Initiative and Attitude", required: true },
+	{ id: "willingness_to_cover", label: "Willingness to Cover", type: "number", min: 1, max: 5, section: "Initiative and Attitude", required: false },
+	{ id: "willingness_to_do_more", label: "Willingness to Do More", type: "number", min: 1, max: 5, section: "Initiative and Attitude", required: false },
+	{ id: "work_independantly", label: "Work Independently", type: "number", min: 1, max: 5, section: "Initiative and Attitude", required: false },
 	{ id: "attitude_remarks", label: "Attitude Remarks", type: "text", section: "Initiative and Attitude", required: false },
 
 	// KPI Awareness Section
-	{ id: "cust_satisfaction", label: "Customer Satisfaction", type: "number", min: 1, max: 5, section: "KPI Awareness", required: true },
-	{ id: "inventory", label: "Inventory", type: "number", min: 1, max: 5, section: "KPI Awareness", required: true },
-	{ id: "sales", label: "Sales", type: "number", min: 1, max: 5, section: "KPI Awareness", required: true },
-	{ id: "individual", label: "Individual Performance", type: "number", min: 1, max: 5, section: "KPI Awareness", required: true },
-	{ id: "team", label: "Team Performance", type: "number", min: 1, max: 5, section: "KPI Awareness", required: true },
+	{ id: "cust_satisfaction", label: "Customer Satisfaction", type: "number", min: 1, max: 5, section: "KPI Awareness", required: false },
+	{ id: "inventory", label: "Inventory", type: "number", min: 1, max: 5, section: "KPI Awareness", required: false },
+	{ id: "sales", label: "Sales", type: "number", min: 1, max: 5, section: "KPI Awareness", required: false },
+	{ id: "individual", label: "Individual Performance", type: "number", min: 1, max: 5, section: "KPI Awareness", required: false },
+	{ id: "team", label: "Team Performance", type: "number", min: 1, max: 5, section: "KPI Awareness", required: false },
 	{ id: "kpi_awareness_remarks", label: "KPI Awareness Remarks", type: "text", section: "KPI Awareness", required: false },
 
 	// Evaluator Section
-	{ id: "evaluator", label: "Evaluator Name", type: "text", section: "Evaluator" },
+	{ id: "evaluator", label: "Evaluator Name", required: true, type: "text", section: "Evaluator" },
 ];
 
 const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps> = ({ observationReports, setObservationReports }) => {
@@ -188,7 +189,7 @@ const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps
 	};
 
 	const handleInputChange = (index: number, field: keyof ObservationReport, value: any) => {
-		setLocalReports((prevReports) => prevReports.map((report, i) => (i === index ? { ...report, [field]: value } : report)));
+		setLocalReports((prevReports) => prevReports.map((report, i) => (i === index ? { ...report, [field]: value === "" ? null : value } : report)));
 	};
 
 	// Add a new report
@@ -269,6 +270,8 @@ const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps
 																// Clamp value to min/max, if applicable
 																value = isNaN(numericValue) ? "" : Math.min(Math.max(numericValue, field.min || 0), field.max || Infinity);
 															}
+														} else if (report[field.id as keyof ObservationReport] === "") {
+															value = null;
 														} else if (field.type === "date") {
 															// Convert date string to Date object
 															value = new Date(inputValue);
@@ -281,7 +284,7 @@ const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps
 													}}
 													{...(field.min !== undefined && { min: field.min })}
 													{...(field.max !== undefined && { max: field.max })}
-													{...((field.required ?? true) && { required: true })}
+													{...((field.required ?? false) && { required: false })}
 													{...(field.step !== undefined && { step: field.step })}
 												/>
 											)}
@@ -318,7 +321,6 @@ const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps
 					</button>
 				</div>
 
-				{/* Confirm Reports Button */}
 				<div>
 					<button
 						type="button"
@@ -332,7 +334,6 @@ const EmployeeObservationReportForm: React.FC<EmployeeObservationReportFormProps
 					</button>
 				</div>
 			</div>
-			{/* Bootstrap Modal */}
 			{showModal && (
 				<div className="modal show" tabIndex={-1} style={{ display: "block" }}>
 					<div className="modal-dialog">
