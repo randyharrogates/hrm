@@ -62,71 +62,82 @@ const EmployeeList: React.FC = () => {
 	// Define columns for DataTable
 	const columns = [
 		{
-			name: "Employee Number (EN)",
+			name: "EN",
 			selector: (row: EmployeeTypes) => (row && row.EN ? row.EN : "N/A") || "N/A",
 			sortable: true,
-			minWidth: "250px",
+			minWidth: "80px",
+			reorder: true,
 		},
 		{
 			name: "Name",
 			selector: (row: EmployeeTypes) => (row && row.name ? row.name : "N/A") || "N/A",
 			sortable: true,
+			reorder: true,
+			wrap: true,
 		},
 		{
-			name: "Contact No.",
+			name: "Contact",
 			selector: (row: EmployeeTypes) => (row && row.contact ? row.contact : "N/A") || "N/A",
 			sortable: true,
-			minWidth: "150px",
+			minWidth: "110px",
+			reorder: true,
 		},
 		{
-			name: "Employee Type",
+			name: "Emp Type",
 			selector: (row: EmployeeTypes) => (row && row.employee_type ? row.employee_type : "N/A"),
 			sortable: true,
-			minWidth: "200px",
+			minWidth: "130px",
+			reorder: true,
 		},
 		{
 			name: "Training Outlet",
 			selector: (row: EmployeeTypes) => (row && row.training_outlet ? row.training_outlet : "N/A") || "N/A",
 			sortable: true,
-			minWidth: "200px",
+			minWidth: "170px",
+			reorder: true,
 		},
 		{
 			name: "Outlet",
 			selector: (row: EmployeeTypes) => (row && row.outlet ? row.outlet : "N/A") || "N/A",
 			sortable: true,
+			reorder: true,
 		},
 		{
-			name: "Probation Start Date",
+			name: "Probation Start",
 			selector: (row: EmployeeTypes) => {
 				// Safely parse the date
 				const startDate = row.probation_start_date ? new Date(row.probation_start_date) : null;
 				return startDate && !isNaN(startDate.getTime()) ? startDate.toISOString().split("T")[0] : "N/A";
 			},
 			sortable: true,
-			minWidth: "250px",
+			minWidth: "170px",
+			reorder: true,
 		},
 		{
-			name: "Probation End Date",
+			name: "Probation End",
 			selector: (row: EmployeeTypes) => {
 				// Safely parse the date
 				const endDate = row.probation_end_date ? new Date(row.probation_end_date) : null;
 				return endDate && !isNaN(endDate.getTime()) ? endDate.toISOString().split("T")[0] : "N/A";
 			},
 			sortable: true,
-			minWidth: "250px",
+			minWidth: "160px",
+			reorder: true,
 		},
 
 		{
-			name: "Extended Probation",
+			name: "Extended Prob",
 			selector: (row: EmployeeTypes) => (row && row.extended_probation ? "Yes" : "No"),
 			sortable: true,
-			minWidth: "250px",
+			minWidth: "160px",
+			reorder: true,
 		},
 		{
-			name: "Employee Status",
+			name: "Emp Status",
 			selector: (row: EmployeeTypes) => (row && row.status ? row.status : "N/A"),
 			sortable: true,
-			minWidth: "200px",
+			minWidth: "140px",
+			reorder: true,
 		},
 		{
 			name: "Transit Date",
@@ -136,12 +147,14 @@ const EmployeeList: React.FC = () => {
 				return endDate && !isNaN(endDate.getTime()) ? endDate.toISOString().split("T")[0] : "N/A";
 			},
 			sortable: true,
-			minWidth: "250px",
+			minWidth: "150px",
+			reorder: true,
 		},
 		{
 			name: "Grade",
 			selector: (row: EmployeeTypes) => (row && row.overall_grading_score ? row.overall_grading_score : 0 || 0),
 			sortable: true,
+			reorder: true,
 		},
 		{
 			name: "Actions",
@@ -153,9 +166,9 @@ const EmployeeList: React.FC = () => {
 					<button className="btn btn-outline-info btn-sm ms-2" onClick={() => navigateToEmployeePage(row._id)}>
 						<i className="bi bi-eye"></i> View
 					</button>
-					<button className="btn btn-outline-danger btn-sm ms-2 disabled" onClick={() => handleDelete(row._id)}>
+					{/* <button className="btn btn-outline-danger btn-sm ms-2 disabled" onClick={() => handleDelete(row._id)}>
 						<i className="bi bi-trash"></i> Delete
-					</button>
+					</button> */}
 				</div>
 			),
 			ignoreRowClick: true,
@@ -270,32 +283,41 @@ const EmployeeList: React.FC = () => {
 					<i className="bi bi-file-earmark-excel"></i> Export to Excel
 				</button>
 			</div>
-
-			<DataTable
-				columns={columns}
-				data={filteredEmployees}
-				pagination
-				highlightOnHover
-				striped
-				defaultSortFieldId={sortColumn || "name"}
-				defaultSortAsc={sortDirection === "asc"}
-				onSort={(column, direction) => {
-					setSortColumn(column.selector as unknown as keyof EmployeeTypes);
-					setSortDirection(direction);
-				}}
-				customStyles={{
-					headCells: {
-						style: {
-							whiteSpace: "normal", // Allows wrapping of header text if needed
-							overflow: "visible", // Ensures the text doesn't get truncated
-							textOverflow: "clip", // Avoids ellipsis in case of overflow
-							wordWrap: "break-word", // Wraps long text onto the next line
-							fontWeight: "bold", // Makes headers bold for visibility
-							fontSize: "16px", // Adjust header font size as needed
+			<div style={{ overflowX: "auto", width: "100%", position: "relative", whiteSpace: "nowrap" }}>
+				<DataTable
+					columns={columns}
+					data={filteredEmployees}
+					pagination
+					highlightOnHover
+					striped
+					defaultSortFieldId={sortColumn || "name"}
+					defaultSortAsc={sortDirection === "asc"}
+					onSort={(column, direction) => {
+						setSortColumn(column.selector as unknown as keyof EmployeeTypes);
+						setSortDirection(direction);
+					}}
+					customStyles={{
+						headCells: {
+							style: {
+								whiteSpace: "normal", // Allows text to wrap
+								overflow: "visible", // Ensures the text is not truncated
+								textOverflow: "clip", // Avoids ellipsis when the text overflows
+								fontWeight: "bold", // Bold header for better visibility
+								fontSize: "12px", // Adjust header font size as needed
+								lineHeight: "1.4", // Space between wrapped lines
+							},
 						},
-					},
-				}}
-			/>
+						cells: {
+							style: {
+								whiteSpace: "normal", // Allows content cells to wrap too (if needed)
+								overflow: "visible",
+								textOverflow: "clip",
+								wordWrap: "break-word",
+							},
+						},
+					}}
+				/>
+			</div>
 		</div>
 	);
 };
