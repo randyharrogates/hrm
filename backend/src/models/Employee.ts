@@ -41,91 +41,91 @@ const ObservationReportSchema: Schema = new Schema({
 	overall_score: { type: Number },
 
 	// Appearance
-	aprons_sop: { type: Number, required: true },
-	grooming: { type: Number, required: true },
-	facial_exp: { type: Number, required: true },
+	aprons_sop: { type: Number, required: false, default: null },
+	grooming: { type: Number, required: false, default: null },
+	facial_exp: { type: Number, required: false, default: null },
 	app_remarks: { type: String, required: false },
 
 	// Equipment
-	handling_knowledge: { type: Number, required: true },
-	location_knowledge: { type: Number, required: true },
-	accounting: { type: Number, required: true },
-	eq_knowledge: { type: String, required: true },
+	handling_knowledge: { type: Number, required: false, default: null },
+	location_knowledge: { type: Number, required: false, default: null },
+	accounting: { type: Number, required: false, default: null },
+	eq_knowledge: { type: String, required: false, default: null },
 	eq_remarks: { type: String, required: false },
 
 	// Daily Ops
-	product_knowledge: { type: Number, required: true },
-	outlet_knowledge: { type: Number, required: true },
-	opening_readiness: { type: Number, required: true },
-	float_and_front: { type: Number, required: true },
-	cleanliness: { type: Number, required: true },
-	pest_control_awareness: { type: Number, required: true },
-	pos_closing: { type: Number, required: true },
-	eq_washing: { type: Number, required: true },
-	safe_storage: { type: Number, required: true },
-	applicances: { type: Number, required: true },
-	floor_cleanliness: { type: Number, required: true },
+	product_knowledge: { type: Number, required: false, default: null },
+	outlet_knowledge: { type: Number, required: false, default: null },
+	opening_readiness: { type: Number, required: false, default: null },
+	float_and_front: { type: Number, required: false, default: null },
+	cleanliness: { type: Number, required: false, default: null },
+	pest_control_awareness: { type: Number, required: false, default: null },
+	pos_closing: { type: Number, required: false, default: null },
+	eq_washing: { type: Number, required: false, default: null },
+	safe_storage: { type: Number, required: false, default: null },
+	applicances: { type: Number, required: false, default: null },
+	floor_cleanliness: { type: Number, required: false, default: null },
 	daily_ops_remarks: { type: String, required: false },
 
 	// Batter Mixing/Cooking
-	mixing_sop: { type: Number, required: true },
-	cooking_quality: { type: Number, required: true },
+	mixing_sop: { type: Number, required: false, default: null },
+	cooking_quality: { type: Number, required: false, default: null },
 	cooking_remarks: { type: String, required: false },
 
 	// Final Product Quality
-	skin_quality: { type: Number, required: true },
-	filling_consistency: { type: Number, required: true },
-	foreign_object_check: { type: Number, required: true },
-	cut_size: { type: Number, required: true },
-	rejected_handling: { type: Number, required: true },
+	skin_quality: { type: Number, required: false, default: null },
+	filling_consistency: { type: Number, required: false, default: null },
+	foreign_object_check: { type: Number, required: false, default: null },
+	cut_size: { type: Number, required: false, default: null },
+	rejected_handling: { type: Number, required: false, default: null },
 	final_product_remarks: { type: String, required: false },
 
 	// Communication
-	team_conversation: { type: Number, required: true },
-	cust_conversation: { type: Number, required: true },
-	listening_skills: { type: Number, required: true },
-	broadcasting: { type: Number, required: true },
-	instruction_understanding: { type: Number, required: true },
+	team_conversation: { type: Number, required: false, default: null },
+	cust_conversation: { type: Number, required: false, default: null },
+	listening_skills: { type: Number, required: false, default: null },
+	broadcasting: { type: Number, required: false, default: null },
+	instruction_understanding: { type: Number, required: false, default: null },
 	communication_remarks: { type: String, required: false },
 
 	// Teamwork
-	team_efficiency: { type: Number, required: true },
-	rotation_confidence: { type: Number, required: true },
-	camaraderie: { type: Number, required: true },
-	assist_initiative: { type: Number, required: true },
+	team_efficiency: { type: Number, required: false, default: null },
+	rotation_confidence: { type: Number, required: false, default: null },
+	camaraderie: { type: Number, required: false, default: null },
+	assist_initiative: { type: Number, required: false, default: null },
 	teamwork_remarks: { type: String, required: false },
 
 	// Customer Service
-	politeness: { type: Number, required: true },
-	service: { type: Number, required: true },
-	upsell: { type: Number, required: true },
-	empathy: { type: Number, required: true },
+	politeness: { type: Number, required: false, default: null },
+	service: { type: Number, required: false, default: null },
+	upsell: { type: Number, required: false, default: null },
+	empathy: { type: Number, required: false, default: null },
 	customer_service_remarks: { type: String, required: false },
 
 	// Problem Solving
-	calmness: { type: Number, required: true },
-	solving_effectiveness: { type: Number, required: true },
-	reporting: { type: Number, required: true },
+	calmness: { type: Number, required: false, default: null },
+	solving_effectiveness: { type: Number, required: false, default: null },
+	reporting: { type: Number, required: false, default: null },
 	problem_solving_remarks: { type: String, required: false },
 
 	// Industry Knowledge
-	food_safety: { type: Number, required: true },
-	safe_workplace: { type: Number, required: true },
-	pest_control: { type: Number, required: true },
+	food_safety: { type: Number, required: false, default: null },
+	safe_workplace: { type: Number, required: false, default: null },
+	pest_control: { type: Number, required: false, default: null },
 	industry_knowledge_remarks: { type: String, required: false },
 
 	// Initiative and Attitude
-	willingness_to_cover: { type: Number, required: true },
-	willingness_to_do_more: { type: Number, required: true },
-	work_independantly: { type: Number, required: true },
+	willingness_to_cover: { type: Number, required: false, default: null },
+	willingness_to_do_more: { type: Number, required: false, default: null },
+	work_independantly: { type: Number, required: false, default: null },
 	attitude_remarks: { type: String, required: false },
 
 	// KPI Awareness
-	cust_satisfaction: { type: Number, required: true },
-	inventory: { type: Number, required: true },
-	sales: { type: Number, required: true },
-	individual: { type: Number, required: true },
-	team: { type: Number, required: true },
+	cust_satisfaction: { type: Number, required: false, default: null },
+	inventory: { type: Number, required: false, default: null },
+	sales: { type: Number, required: false, default: null },
+	individual: { type: Number, required: false, default: null },
+	team: { type: Number, required: false, default: null },
 	kpi_awareness_remarks: { type: String, required: false },
 
 	evaluator: { type: String },
@@ -166,9 +166,11 @@ BaseEmployeeSchema.pre("save", async function (next) {
 			const plainReport = (report as unknown as mongoose.Document).toJSON();
 
 			// Get the numeric fields from the schema-defined fields
+			// Get the numeric fields from the schema-defined fields
 			const numericFields = Object.keys(plainReport).filter((field) => {
-				// Exclude remarks fields and non-numeric fields
-				return !field.endsWith("_remarks") && typeof plainReport[field] === "number" && !field.endsWith("overall_score");
+				const value = plainReport[field];
+				// Exclude remarks fields, non-numeric fields, and fields marked as "NA" or null
+				return !field.endsWith("_remarks") && typeof value === "number" && value !== null;
 			});
 
 			const total = numericFields.reduce((sum, field) => {
@@ -212,7 +214,7 @@ BaseEmployeeSchema.statics.updateOverallScore = async function (employeeId: stri
 
 	if (employee.observationReports.length > 0) {
 		const totalScore = employee.observationReports.reduce((sum: number, report: IObservationReport) => {
-			return sum + parseFloat(report.overall_score.toFixed(2));
+			return sum + (report.overall_score || 0);
 		}, 0);
 
 		employee.overall_grading_score = parseFloat((totalScore / employee.observationReports.length).toFixed(2));
