@@ -170,7 +170,7 @@ BaseEmployeeSchema.pre("save", async function (next) {
 			const numericFields = Object.keys(plainReport).filter((field) => {
 				const value = plainReport[field];
 				// Exclude remarks fields, non-numeric fields, and fields marked as "NA" or null
-				return !field.endsWith("_remarks") && typeof value === "number" && value !== null;
+				return !field.endsWith("_remarks") && typeof value === "number" && value !== null && !field.endsWith("_score");
 			});
 
 			const total = numericFields.reduce((sum, field) => {
