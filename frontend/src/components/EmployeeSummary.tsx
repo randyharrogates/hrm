@@ -91,7 +91,8 @@ const EmployeeSummary: React.FC = () => {
 			Passed: row.passed,
 			Terminated: row.terminated,
 			"In Progress": row.inProgress,
-			"Total Employees": row.total,
+			"Total In Progress": totalInProgress,
+			"Total Employees": totalEmployees,
 		}));
 		// Convert filteredData into a worksheet
 		const worksheet = XLSX.utils.json_to_sheet(formattedData);
