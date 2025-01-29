@@ -118,6 +118,8 @@ const EmployeeSummary: React.FC = () => {
 	// Calculate total employees for the footer
 	const totalEmployees = filteredData.reduce((acc, row) => acc + row.total, 0);
 
+	const totalInProgress = filteredData.reduce((acc, row) => acc + row.inProgress, 0);
+
 	// Chart Data Preparation
 	const chartData = {
 		labels: filteredData.map((item) => item.category),
@@ -284,7 +286,12 @@ const EmployeeSummary: React.FC = () => {
 			<div className="card mt-3 p-3">
 				<div className="row">
 					<div className="col text-center">
-						<strong>Total Employees:</strong> {totalEmployees}
+						<strong>Total Intake to date:</strong> {totalEmployees}
+					</div>
+				</div>
+				<div className="row">
+					<div className="col text-center">
+						<strong>Total In Progress to date:</strong> {totalInProgress}
 					</div>
 				</div>
 			</div>
