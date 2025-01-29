@@ -45,7 +45,7 @@ const EmployeeSummary: React.FC = () => {
 			}
 
 			// In Progress
-			if (employee.status === "InProgress" && (!probationStartDate || probationStartDate < twoWeeksBefore)) {
+			if (employee.status === "InProgress" && !transitDate) {
 				acc[category].inProgress += 1;
 			}
 
@@ -59,7 +59,7 @@ const EmployeeSummary: React.FC = () => {
 				acc[category].terminated += 1;
 			}
 			// Calculate the total for each row
-			acc[category].total = acc[category].newTrainee + acc[category].inProgress + acc[category].passed + acc[category].terminated;
+			acc[category].total = acc[category].inProgress + acc[category].passed + acc[category].terminated;
 
 			return acc;
 		}, {});
@@ -116,7 +116,13 @@ const EmployeeSummary: React.FC = () => {
 	];
 
 	// Calculate total employees for the footer
-	const totalEmployees = filteredData.reduce((acc, row) => acc + row.total, 0);
+	const totalEmployees = filteredData.reduce((acc, row) => {
+		// Exclude rows where 'newTrainee' exists (or is truthy)
+		if (!row.newTrainee) {
+			return acc + row.total;
+		}
+		return acc;
+	}, 0);
 
 	// Chart Data Preparation
 	const chartData = {
