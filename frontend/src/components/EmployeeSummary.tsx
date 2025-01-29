@@ -91,9 +91,20 @@ const EmployeeSummary: React.FC = () => {
 			Passed: row.passed,
 			Terminated: row.terminated,
 			"In Progress": row.inProgress,
-			"Total In Progress": totalInProgress,
-			"Total Employees": totalEmployees,
+			"Total Employees": row.total,
 		}));
+
+		// Add total rows to the data
+		formattedData.push({
+			"Date Range": "Grand Total",
+			Category: "All Categories",
+			"New Training": filteredData.reduce((acc, row) => acc + row.newTrainee, 0),
+			Passed: filteredData.reduce((acc, row) => acc + row.passed, 0),
+			Terminated: filteredData.reduce((acc, row) => acc + row.terminated, 0),
+			"In Progress": totalInProgress,
+			"Total Employees": totalEmployees,
+		});
+		
 		// Convert filteredData into a worksheet
 		const worksheet = XLSX.utils.json_to_sheet(formattedData);
 		// Create a workbook
