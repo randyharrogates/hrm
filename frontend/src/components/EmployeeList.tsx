@@ -166,7 +166,7 @@ const EmployeeList: React.FC = () => {
 					<button className="btn btn-outline-info btn-sm ms-2" onClick={() => navigateToEmployeePage(row._id)}>
 						<i className="bi bi-eye"></i> View
 					</button>
-					<button className="btn btn-outline-danger btn-sm ms-2 disabled" onClick={() => handleDelete(row._id)}>
+					<button className="btn btn-outline-danger btn-sm ms-2" onClick={() => handleDelete(row._id)}>
 						<i className="bi bi-trash"></i> Delete
 					</button>
 				</div>
