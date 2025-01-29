@@ -116,13 +116,7 @@ const EmployeeSummary: React.FC = () => {
 	];
 
 	// Calculate total employees for the footer
-	const totalEmployees = filteredData.reduce((acc, row) => {
-		// Exclude rows where 'newTrainee' exists (or is truthy)
-		if (!row.newTrainee) {
-			return acc + row.total;
-		}
-		return acc;
-	}, 0);
+	const totalEmployees = filteredData.reduce((acc, row) => acc + row.total, 0);
 
 	// Chart Data Preparation
 	const chartData = {
