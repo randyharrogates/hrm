@@ -14,6 +14,8 @@ const EmployeeSummary: React.FC = () => {
 	const [filterEndDate, setFilterEndDate] = useState<string>("");
 	const [filterStartDate, setFilterStartDate] = useState<string>("");
 	const [filteredData, setFilteredData] = useState<any[]>([]);
+	const [selectedRow, setSelectedRow] = useState<any>(null);
+	const [detailedBreakdown, setDetailedBreakdown] = useState<any[]>([]);
 
 	useEffect(() => {
 		const fetchEmployees = async () => {
@@ -104,7 +106,7 @@ const EmployeeSummary: React.FC = () => {
 			"In Progress": totalInProgress,
 			"Total Employees": totalEmployees,
 		});
-		
+
 		// Convert filteredData into a worksheet
 		const worksheet = XLSX.utils.json_to_sheet(formattedData);
 		// Create a workbook
@@ -116,6 +118,44 @@ const EmployeeSummary: React.FC = () => {
 		const data = new Blob([excelBuffer], { type: "application/octet-stream" });
 		saveAs(data, "EmployeeSummary.xlsx");
 	};
+
+	const handleRowClick = (row: any) => {
+		setSelectedRow(row);
+
+		const endDate = new Date(filterEndDate);
+		const startDate = new Date(filterStartDate);
+
+		// Filter employees based on the selected category and date range
+		const breakdownData = employees.filter((employee: any) => {
+			const probationStartDate = employee.probation_start_date ? new Date(employee.probation_start_date) : null;
+			const transitDate = employee.transit_date ? new Date(employee.transit_date) : null;
+
+			// Match category
+			if (employee.employee_type !== row.category) return false;
+
+			// Determine status group
+			if (employee.status === "InProgress" && probationStartDate && probationStartDate >= startDate && probationStartDate <= endDate) {
+				return "newTrainee";
+			} else if (employee.status === "InProgress") {
+				return "inProgress";
+			} else if (employee.status === "Passed" && transitDate && transitDate >= startDate && transitDate <= endDate) {
+				return "passed";
+			} else if (employee.status === "Terminated" && transitDate && transitDate >= startDate && transitDate <= endDate) {
+				return "terminated";
+			}
+			return true;
+		});
+
+		setDetailedBreakdown(breakdownData);
+	};
+
+	const detailedColumns = [
+		{ name: "EN", selector: (row: any) => row.EN, sortable: true },
+		{ name: "Name", selector: (row: any) => row.name, sortable: true },
+		{ name: "Status", selector: (row: any) => row.status, sortable: true },
+		{ name: "Start Date", selector: (row: any) => new Date(row.probation_start_date).toLocaleDateString(), sortable: true },
+		{ name: "Transit Date", selector: (row: any) => (row.transit_date ? new Date(row.transit_date).toLocaleDateString() : "-"), sortable: true },
+	];
 
 	const columns = [
 		{ name: "Date Range", selector: (row: any) => row.dateRange, sortable: true, minWidth: "300px" },
@@ -314,6 +354,7 @@ const EmployeeSummary: React.FC = () => {
 				pagination
 				highlightOnHover
 				striped
+				onRowClicked={handleRowClick}
 				customStyles={{
 					headCells: {
 						style: {
@@ -322,8 +363,35 @@ const EmployeeSummary: React.FC = () => {
 							fontSize: "16px",
 						},
 					},
+					rows: {
+						style: {
+							cursor: "pointer",
+						},
+					},
 				}}
 			/>
+			{/* Add the detailed breakdown table */}
+			{selectedRow && (
+				<div className="card shadow p-4 mt-4">
+					<h4 className="text-secondary mb-3">Detailed Breakdown for {selectedRow.category}</h4>
+					<DataTable
+						columns={detailedColumns}
+						data={detailedBreakdown}
+						pagination
+						highlightOnHover
+						striped
+						customStyles={{
+							headCells: {
+								style: {
+									whiteSpace: "normal",
+									fontWeight: "bold",
+									fontSize: "14px",
+								},
+							},
+						}}
+					/>
+				</div>
+			)}
 			{/* Export Button */}
 			<div className="text-end mb-3">
 				<button className="btn btn-success" onClick={exportToExcel}>
