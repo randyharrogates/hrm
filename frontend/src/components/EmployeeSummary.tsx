@@ -41,25 +41,35 @@ const EmployeeSummary: React.FC = () => {
 				acc[category] = { dateRange: dateRangeText, newTrainee: 0, passed: 0, terminated: 0, inProgress: 0, total: 0 };
 			}
 
+			// Determine employee status within the date range
+			let statusInRange = "InProgress";
+			if (transitDate && transitDate <= endDate) {
+				statusInRange = employee.status; // Use final status if transition happened before or on end date
+			}
+
 			// New Trainee
-			if (employee.status === "InProgress" && probationStartDate && probationStartDate >= twoWeeksBefore && probationStartDate <= endDate) {
+			if (probationStartDate && probationStartDate >= twoWeeksBefore && probationStartDate <= endDate) {
 				acc[category].newTrainee += 1;
 			}
 
-			// In Progress
-			if (employee.status === "InProgress" && !transitDate) {
-				acc[category].inProgress += 1;
+			// In Progress - count if they were in progress during the date range
+			if (statusInRange === "InProgress") {
+				// Only count as in progress if they started before or during the range
+				if (probationStartDate && probationStartDate <= endDate) {
+					acc[category].inProgress += 1;
+				}
 			}
 
-			// Passed
-			if (employee.status === "Passed" && transitDate && transitDate >= twoWeeksBefore && transitDate <= endDate) {
+			// Passed - only count if they passed during the date range
+			if (statusInRange === "Passed" && transitDate && transitDate >= twoWeeksBefore && transitDate <= endDate) {
 				acc[category].passed += 1;
 			}
 
-			// Terminated
-			if (employee.status === "Terminated" && transitDate && transitDate >= twoWeeksBefore && transitDate <= endDate) {
+			// Terminated - only count if they were terminated during the date range
+			if (statusInRange === "Terminated" && transitDate && transitDate >= twoWeeksBefore && transitDate <= endDate) {
 				acc[category].terminated += 1;
 			}
+
 			// Calculate the total for each row
 			acc[category].total = acc[category].inProgress + acc[category].passed + acc[category].terminated;
 
@@ -168,7 +178,10 @@ const EmployeeSummary: React.FC = () => {
 	];
 
 	// Calculate total employees for the footer
-	const totalEmployees = filteredData.reduce((acc, row) => acc + row.total, 0);
+	const totalEmployees = filteredData.reduce((acc, row) => {
+		// Sum of new trainees, passed, and terminated within the range
+		return acc + row.inProgress + row.passed + row.terminated;
+	}, 0);
 
 	const totalInProgress = filteredData.reduce((acc, row) => acc + row.inProgress, 0);
 
@@ -338,12 +351,12 @@ const EmployeeSummary: React.FC = () => {
 			<div className="card mt-3 p-3">
 				<div className="row">
 					<div className="col text-center">
-						<strong>Total Intake to date:</strong> {totalEmployees}
+						<strong>Total employees within range:</strong> {totalEmployees}
 					</div>
 				</div>
 				<div className="row">
 					<div className="col text-center">
-						<strong>Total In Progress to date:</strong> {totalInProgress}
+						<strong>Total In Progress within range:</strong> {totalInProgress}
 					</div>
 				</div>
 			</div>
