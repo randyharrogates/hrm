@@ -43,7 +43,7 @@ export const uploadObservationReports = async (req: Request, res: Response) => {
 					continue;
 				}
 				const rawWeekStartDate = data[11][5];
-				const weekStartDate = dayjs(rawWeekStartDate, ["YYYY-MM-DD", "MM/DD/YYYY", "DD-MM-YYYY"], true); // Allow multiple formats
+				const weekStartDate = dayjs(rawWeekStartDate, ["YYYY-MM-DD", "MM/DD/YYYY", "DD-MM-YYYY"], true).startOf("day"); // Parse and set to start of day
 				if (!weekStartDate.isValid()) {
 					console.error(`Invalid week_start_date format: ${rawWeekStartDate}`);
 					throw new Error(`Invalid week_start_date format in row 11, column 5: ${rawWeekStartDate}`);
@@ -51,7 +51,7 @@ export const uploadObservationReports = async (req: Request, res: Response) => {
 
 				// Create observation report object for the current column
 				const observationReport: IObservationReport = {
-					week_start_date: weekStartDate.toDate(), // Week start date, adjust index accordingly
+					week_start_date: weekStartDate.add(1, "day").toDate(), // Add 1 day to compensate for timezone offset
 					training_centre: data[9][5], // Training centre, adjust index accordingly
 					evaluator: data[7][5], // Evaluator name, adjust index accordingly
 
