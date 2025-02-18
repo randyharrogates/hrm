@@ -13,8 +13,8 @@ const EmployeeList: React.FC = () => {
 	const [startRange, setStartRange] = useState<string>(""); // Start date range
 	const [endRange, setEndRange] = useState<string>(""); // End date range
 	const [searchQuery, setSearchQuery] = useState<string>("");
-	const [sortColumn, setSortColumn] = useState<keyof EmployeeTypes | null>(null); // Track the current column for sorting
-	const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc"); // Track sort direction
+	const [sortColumn, setSortColumn] = useState<keyof EmployeeTypes>("EN"); // Set default sort column to EN
+	const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc"); // Set default sort direction to descending
 	const [extendedProbationFilter, setExtendedProbationFilter] = useState<string>(""); // Filter for extended probation
 	const [statusFilter, setStatusFilter] = useState<string>(""); // Filter for employee status
 	const navigate = useNavigate();
@@ -178,34 +178,39 @@ const EmployeeList: React.FC = () => {
 	];
 
 	// Filter employees based on the search query
-	const filteredEmployees = employees.filter((employee) => {
-		const query = searchQuery.toLowerCase();
-		// Search filter
-		const matchesSearch =
-			employee.EN?.toLowerCase().includes(query) ||
-			employee.name?.toLowerCase().includes(query) ||
-			employee.contact?.toLowerCase().includes(query) ||
-			employee.employee_type?.toLowerCase().includes(query) ||
-			employee.training_outlet?.toLowerCase().includes(query) ||
-			employee.outlet?.toLowerCase().includes(query) ||
-			(employee.overall_grading_score ? employee.overall_grading_score.toString().includes(query) : false);
+	const filteredEmployees = employees
+		.filter((employee) => {
+			const query = searchQuery.toLowerCase();
+			// Search filter
+			const matchesSearch =
+				employee.EN?.toLowerCase().includes(query) ||
+				employee.name?.toLowerCase().includes(query) ||
+				employee.contact?.toLowerCase().includes(query) ||
+				employee.employee_type?.toLowerCase().includes(query) ||
+				employee.training_outlet?.toLowerCase().includes(query) ||
+				employee.outlet?.toLowerCase().includes(query) ||
+				(employee.overall_grading_score ? employee.overall_grading_score.toString().includes(query) : false);
 
-		// Date range filter
-		const startDate = employee.probation_start_date ? new Date(employee.probation_start_date) : null;
-		const endDate = employee.probation_end_date ? new Date(employee.probation_end_date) : null;
-		const rangeStart = startRange ? new Date(startRange) : null;
-		const rangeEnd = endRange ? new Date(endRange) : null;
+			// Date range filter
+			const startDate = employee.probation_start_date ? new Date(employee.probation_start_date) : null;
+			const endDate = employee.probation_end_date ? new Date(employee.probation_end_date) : null;
+			const rangeStart = startRange ? new Date(startRange) : null;
+			const rangeEnd = endRange ? new Date(endRange) : null;
 
-		const matchesDateRange = (!rangeStart || (startDate && startDate >= rangeStart)) && (!rangeEnd || (endDate && endDate <= rangeEnd));
-		// Extended Probation filter
-		const matchesExtendedProbation =
-			extendedProbationFilter === "" || (extendedProbationFilter === "Yes" && employee.extended_probation) || (extendedProbationFilter === "No" && !employee.extended_probation);
+			const matchesDateRange = (!rangeStart || (startDate && startDate >= rangeStart)) && (!rangeEnd || (endDate && endDate <= rangeEnd));
+			// Extended Probation filter
+			const matchesExtendedProbation =
+				extendedProbationFilter === "" || (extendedProbationFilter === "Yes" && employee.extended_probation) || (extendedProbationFilter === "No" && !employee.extended_probation);
 
-		// Status filter
-		const matchesStatus = statusFilter === "" || employee.status === statusFilter;
+			// Status filter
+			const matchesStatus = statusFilter === "" || employee.status === statusFilter;
 
-		return matchesSearch && matchesDateRange && matchesExtendedProbation && matchesStatus;
-	});
+			return matchesSearch && matchesDateRange && matchesExtendedProbation && matchesStatus;
+		})
+		.sort((a, b) => {
+			// Sort by EN in descending order
+			return b.EN.localeCompare(a.EN);
+		});
 
 	// Export to Excel
 	const exportToExcel = () => {
@@ -290,8 +295,8 @@ const EmployeeList: React.FC = () => {
 					pagination
 					highlightOnHover
 					striped
-					defaultSortFieldId={sortColumn || "name"}
-					defaultSortAsc={sortDirection === "asc"}
+					defaultSortFieldId="EN"
+					defaultSortAsc={false}
 					onSort={(column, direction) => {
 						setSortColumn(column.selector as unknown as keyof EmployeeTypes);
 						setSortDirection(direction);
