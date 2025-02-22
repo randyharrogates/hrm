@@ -200,11 +200,12 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, isEditing = false
 						<option value="InProgress">In Progress</option>
 						<option value="Passed">Passed</option>
 						<option value="Terminated">Terminated</option>
+						<option value="PermStaff">Permanent Staff</option>
 					</select>
 				</div>
 
 				{/* Conditionally render the transit_date field */}
-				{(employee.status === "Passed" || employee.status === "Terminated") && (
+				{(employee.status === "Passed" || employee.status === "Terminated" || employee.status === "PermStaff") && (
 					<div className="col-md-6">
 						<label htmlFor="transit_date" className="form-label">
 							Transit Date
