@@ -1,3 +1,10 @@
+/**
+ * The above code is a TypeScript React component called `EmployeeList`. Here is a summary of what the
+ * code is doing:
+ *
+ * @format
+ */
+
 /** @format */
 
 import React, { useEffect, useState } from "react";
@@ -278,6 +285,7 @@ const EmployeeList: React.FC = () => {
 						<option value="InProgress">In Progress</option>
 						<option value="Passed">Passed</option>
 						<option value="Terminated">Terminated</option>
+						<option value="PermStaff">Permanent Staff</option>
 					</select>
 				</div>
 			</div>

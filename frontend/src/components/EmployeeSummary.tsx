@@ -43,8 +43,22 @@ const EmployeeSummary: React.FC = () => {
 
 			// Determine employee status within the date range
 			let statusInRange = "InProgress";
-			if (transitDate && transitDate <= endDate) {
-				statusInRange = employee.status; // Use final status if transition happened before or on end date
+
+			// If they have a transit_date, determine their status during the date range
+			if (transitDate) {
+				// If the date range is before their transit date, they were still InProgress
+				if (endDate < transitDate) {
+					statusInRange = "InProgress";
+				}
+				// If the date range includes or is after their transit date, use their current status
+				else {
+					statusInRange = employee.status;
+				}
+			}
+
+			// Skip if they were PermStaff during the date range
+			if (statusInRange === "PermStaff") {
+				return acc;
 			}
 
 			// New Trainee
