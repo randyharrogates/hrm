@@ -379,6 +379,8 @@ const EmployeeSummary: React.FC = () => {
 				columns={columns}
 				data={filteredData}
 				pagination
+				paginationPerPage={5}
+				paginationRowsPerPageOptions={[5, 10, 15, 20, 25, 30]}
 				highlightOnHover
 				striped
 				onRowClicked={handleRowClick}
@@ -405,6 +407,8 @@ const EmployeeSummary: React.FC = () => {
 						columns={detailedColumns}
 						data={detailedBreakdown}
 						pagination
+						paginationPerPage={5}
+						paginationRowsPerPageOptions={[5, 10, 15, 20, 25, 30]}
 						highlightOnHover
 						striped
 						customStyles={{

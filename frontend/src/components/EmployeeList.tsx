@@ -301,6 +301,8 @@ const EmployeeList: React.FC = () => {
 					columns={columns}
 					data={filteredEmployees}
 					pagination
+					paginationPerPage={5}
+					paginationRowsPerPageOptions={[5, 10, 15, 20, 25, 30]}
 					highlightOnHover
 					striped
 					defaultSortFieldId="EN"
